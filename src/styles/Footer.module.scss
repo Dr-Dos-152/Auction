@@ -1,0 +1,14 @@
+@use "@cloudscape-design/design-tokens/index" as awsui;
+.footer {
+    background-color: #0f1b2a;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    .footerText {
+        height: 2rem;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
