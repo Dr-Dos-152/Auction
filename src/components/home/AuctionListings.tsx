@@ -2,14 +2,15 @@ import React, { useContext, useEffect } from "react"
 
 import { useQuery } from "react-query"
 import Spinner from "@cloudscape-design/components/spinner"
-import { AlertContext } from "./Home"
 import moment from "moment"
 import Auction from "../Auction"
 import ButtonDropdown from "@cloudscape-design/components/button-dropdown"
+import { SpaceBetween } from "@cloudscape-design/components"
+import { AlertContext } from "../../App"
 
 const fetchAuctions = async () => {
   const headers = {
-    Authorization: "Basic " + btoa("test:test"),
+    Authorization: "Basic dGVzdDp0ZXN0",
   }
   const result = await fetch("http://localhost:8080/api/v1/auctions", {
     method: "GET",
@@ -76,23 +77,25 @@ const AuctionListings = () => {
 const AuctionSelectionDropdown = () => {
   return (
     <>
-      <ButtonDropdown
-        items={[
-          { text: "Latest", id: "rm", disabled: false },
-          { text: "Oldest", id: "rm", disabled: false },
-        ]}
-      >
-        Sort By Created
-      </ButtonDropdown>
+      <SpaceBetween size="l" direction="vertical">
+        <ButtonDropdown
+          items={[
+            { text: "Latest", id: "rm", disabled: false },
+            { text: "Oldest", id: "rm", disabled: false },
+          ]}
+        >
+          Sort By Created
+        </ButtonDropdown>
 
-      <ButtonDropdown
-        items={[
-          { text: "Least", id: "rm", disabled: false },
-          { text: "Most", id: "rm", disabled: false },
-        ]}
-      >
-        Sort By Bids:
-      </ButtonDropdown>
+        <ButtonDropdown
+          items={[
+            { text: "Least", id: "rm", disabled: false },
+            { text: "Most", id: "rm", disabled: false },
+          ]}
+        >
+          Sort By Bids
+        </ButtonDropdown>
+      </SpaceBetween>
     </>
   )
 }
