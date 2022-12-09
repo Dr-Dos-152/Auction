@@ -10,68 +10,13 @@ import Textarea from "@cloudscape-design/components/textarea"
 import { forOwn, map } from "lodash"
 import { useContext, useState } from "react"
 import { useMutation } from "react-query"
-import { z } from "zod"
 import { AlertContext } from "../App"
-import { redirect, useNavigate } from "react-router-dom"
-
-const auctionSchema = z.object({
-  name: z.string().max(30).min(5).trim(),
-  description: z.string().max(100).min(5).trim(),
-  startingPrice: z.number().min(1),
-})
-
-type Auction = z.infer<typeof auctionSchema>
-
-const itemSchema = z.object({
-  name: z.string().max(30).min(10).trim(),
-  description: z.string().max(100).min(10).trim(),
-  categoryId: z.string().optional(),
-})
-
-type Item = z.infer<typeof itemSchema>
-
-const constructAuctionBody = (
-  auction: Auction,
-  item: Item,
-  categoryId: string
-) => {
-  return {
-    ...auction,
-    item: {
-      ...item,
-      categoryId,
-    },
-  }
-}
-
-const createAuction = async (newAuction: {
-  auction: Auction
-  item: Item
-  categoryId: string
-}) => {
-  const response = await fetch("http://localhost:8080/api/v1/auctions", {
-    method: "POST",
-    body: JSON.stringify(
-      constructAuctionBody(
-        newAuction.auction,
-        newAuction.item,
-        newAuction.categoryId
-      )
-    ),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Basic dGVzdDp0ZXN0",
-    },
-  })
-
-  // If the response is not successful, throw an error
-  if (!response.ok) {
-    throw new Error(response.statusText)
-  }
-
-  // Return the response data
-  return await response.json()
-}
+import { useNavigate } from "react-router-dom"
+import { Auction, auctionSchema } from "../schemas/auctionSchema"
+import { Item, itemSchema } from "../schemas/itemSchema"
+import { createAuction } from "../hooks/useCreateAuction"
+import DatePicker from "@cloudscape-design/components/date-picker"
+import moment from "moment"
 
 const CreateListing = () => {
   const navigate = useNavigate()
@@ -89,22 +34,24 @@ const CreateListing = () => {
   const [auctionInfo, setAuctionInfo] = useState({
     name: "",
     description: "",
-    startingPrice: 6.9,
+    closingTime: "",
   })
   const [auctionInfoErrors, setAuctionInfoErrors] = useState({
     name: "",
     description: "",
-    startingPrice: "",
+    closingTime: "",
   })
 
   // Item info
   const [itemInfo, setItemInfo] = useState({
     name: "",
     description: "",
+    startingPrice: "4.99",
   })
   const [itemInfoErrors, setItemInfoErrors] = useState({
     name: "",
     description: "",
+    startingPrice: "",
   })
 
   const { setAlertNotification } = useContext(AlertContext)
@@ -222,6 +169,7 @@ const CreateListing = () => {
 
     if (!auctionResult.success) {
       const errors = auctionResult.error.flatten()
+      console.log(errors)
       const fieldErrors = errors.fieldErrors
       forOwn(fieldErrors, (value, key) => {
         setAuctionInfoErrors((prevAuctionInfoErrors) => {
@@ -266,7 +214,7 @@ const CreateListing = () => {
         }
         header={<Header variant="h1">Create Listing</Header>}
       >
-        <Container header={<Header variant="h2">Form container header</Header>}>
+        <Container>
           <SpaceBetween direction="vertical" size="l">
             <FormField label="Auction title" errorText={auctionInfoErrors.name}>
               <Input
@@ -310,20 +258,57 @@ const CreateListing = () => {
               />
             </FormField>
 
-            <Select
-              errorText={"Error loading categories"}
-              invalid={showCategoryError}
-              options={categories}
-              selectedOption={category}
-              onChange={(e) => {
-                setShowCategoryError(false)
-                const selectedOption = e.detail.selectedOption
-                setSelectedCategory(selectedOption)
-              }}
-              selectedAriaLabel="Selected"
-              onLoadItems={handleLoadCategoryOptions}
-              loadingText={"Loading Categories..."}
-            />
+            <FormField label="Category">
+              <Select
+                errorText={"Error loading categories"}
+                invalid={showCategoryError}
+                options={categories}
+                selectedOption={category}
+                onChange={(e) => {
+                  setShowCategoryError(false)
+                  const selectedOption = e.detail.selectedOption
+                  setSelectedCategory(selectedOption)
+                }}
+                selectedAriaLabel="Selected"
+                onLoadItems={handleLoadCategoryOptions}
+                loadingText={"Loading Categories..."}
+              />
+            </FormField>
+
+            <FormField
+              label="Certificate expiry"
+              constraintText="Use YYYY/MM/DD format."
+              errorText={auctionInfoErrors.closingTime}
+            >
+              <DatePicker
+                onChange={({ detail }) => {
+                  handleAuctionInfoChange("closingTime", detail.value)
+                }}
+                value={auctionInfo.closingTime}
+                openCalendarAriaLabel={(selectedDate) =>
+                  "Choose certificate expiry date" +
+                  (selectedDate ? `, selected date is ${selectedDate}` : "")
+                }
+                isDateEnabled={(date) => moment(date).isAfter(moment.now())}
+                nextMonthAriaLabel="Next month"
+                placeholder="YYYY/MM/DD"
+                previousMonthAriaLabel="Previous month"
+                todayAriaLabel="Today"
+              />
+            </FormField>
+
+            <FormField
+              label="Starting Price"
+              stretch={false}
+              errorText={itemInfoErrors.startingPrice}
+            >
+              <Input
+                value={itemInfo.startingPrice}
+                onChange={(e) =>
+                  handleItemInfoChange("startingPrice", e.detail.value)
+                }
+              />
+            </FormField>
           </SpaceBetween>
         </Container>
       </Form>

@@ -5,7 +5,7 @@ import style from "../styles/AuctionListings.module.scss"
 import AuctionItem, { Item } from "./AuctionItem"
 
 interface Auction {
-  title: string
+  name: string
   description: string
   item: Item
   closingTime: string
@@ -28,7 +28,9 @@ const Auction = (props: Auction) => {
                 width={"100px"}
                 src="images/MichaelScott.png"
               />
-              {props.title}
+              <b>{props.name}</b>
+
+              <p>{props.description}</p>
             </div>
           </Header>
         }
