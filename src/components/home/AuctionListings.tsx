@@ -5,15 +5,20 @@ import Spinner from "@cloudscape-design/components/spinner"
 import moment from "moment"
 import Auction from "../Auction"
 import ButtonDropdown from "@cloudscape-design/components/button-dropdown"
-import { Badge, SpaceBetween } from "@cloudscape-design/components"
+import { Badge, Pagination, SpaceBetween } from "@cloudscape-design/components"
 import { AlertContext } from "../../App"
 
-const fetchAuctions = async (createdAtOrder: CreatedAtOrder) => {
+const fetchAuctions = async (
+  createdAtOrder: CreatedAtOrder,
+  currentPageIndex: number
+) => {
   const headers = {
     Authorization: "Basic dGVzdDp0ZXN0",
   }
   const result = await fetch(
-    `http://localhost:8080/api/v1/auctions?closingTime=${createdAtOrder}`,
+    `http://localhost:8080/api/v1/auctions?pageNumber=${
+      currentPageIndex - 1
+    }&createdAtOrder=${createdAtOrder}`,
     {
       method: "GET",
       headers: headers,
@@ -30,15 +35,21 @@ const fetchAuctions = async (createdAtOrder: CreatedAtOrder) => {
 const AuctionListings = () => {
   const [createdAtOrder, setCreatedAtOrder] = useState(CreatedAtOrder.LATEST)
   const [bidsOrder, setBidsOrder] = useState(BidsOrder.MOST)
+  const [currentPageIndex, setCurrentPageIndex] = useState(1)
+  console.log("pageIndex", currentPageIndex)
 
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery<
-    Array<Auction>,
+    { auctions: Array<Auction>; numPages: number },
     Error
-  >("queryAllAuctions", () => fetchAuctions(createdAtOrder), {
+  >("queryAllAuctions", () => fetchAuctions(createdAtOrder, currentPageIndex), {
     retry: false,
     refetchOnWindowFocus: false,
   })
   const { setAlertNotification } = useContext(AlertContext)
+
+  useEffect(() => {
+    refetch()
+  }, [currentPageIndex])
 
   useEffect(() => {
     if (isError) {
@@ -75,7 +86,22 @@ const AuctionListings = () => {
       </div>
 
       <div>
-        {data!.map((auctionItem: any) => {
+        <Pagination
+          ariaLabels={{
+            nextPageLabel: "Next page",
+            previousPageLabel: "Previous page",
+            pageLabel: (pageNumber) => `Page ${pageNumber} of all pages`,
+          }}
+          pagesCount={data!.numPages}
+          currentPageIndex={currentPageIndex}
+          onChange={(e) => {
+            setCurrentPageIndex(e.detail.currentPageIndex)
+          }}
+        />
+      </div>
+
+      <div>
+        {data!.auctions.map((auctionItem: any) => {
           return (
             <Auction
               key={auctionItem.id}
