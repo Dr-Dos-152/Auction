@@ -5,7 +5,12 @@ import Spinner from "@cloudscape-design/components/spinner"
 import moment from "moment"
 import Auction from "../Auction"
 import ButtonDropdown from "@cloudscape-design/components/button-dropdown"
-import { Badge, Pagination, SpaceBetween } from "@cloudscape-design/components"
+import {
+  Badge,
+  Grid,
+  Pagination,
+  SpaceBetween,
+} from "@cloudscape-design/components"
 import { AlertContext } from "../../App"
 
 const fetchAuctions = async (
@@ -100,7 +105,14 @@ const AuctionListings = () => {
         />
       </div>
 
-      <div>
+      <Grid
+        gridDefinition={[
+          { colspan: { default: 12, s: 6 } },
+          { colspan: { default: 12, s: 6 } },
+          { colspan: { default: 12, s: 6 } },
+          { colspan: { default: 12, s: 6 } },
+        ]}
+      >
         {data!.auctions.map((auctionItem: any) => {
           return (
             <Auction
@@ -110,7 +122,7 @@ const AuctionListings = () => {
             />
           )
         })}
-      </div>
+      </Grid>
     </>
   )
 }
