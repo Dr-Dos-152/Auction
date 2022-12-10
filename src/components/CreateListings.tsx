@@ -204,7 +204,13 @@ const CreateListing = () => {
       <Form
         actions={
           <>
-            <Button formAction="none" variant="link">
+            <Button
+              onClick={() => {
+                navigate(-1)
+              }}
+              formAction="none"
+              variant="link"
+            >
               Cancel
             </Button>
             <Button onClick={handleClickSubmit} variant="primary">

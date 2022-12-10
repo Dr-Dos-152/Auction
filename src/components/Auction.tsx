@@ -29,8 +29,6 @@ const Auction = (props: Auction) => {
                 src="images/MichaelScott.png"
               />
               <b>{props.name}</b>
-
-              <p>{props.description}</p>
             </div>
           </Header>
         }

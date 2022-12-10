@@ -1,21 +1,24 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import { useQuery } from "react-query"
 import Spinner from "@cloudscape-design/components/spinner"
 import moment from "moment"
 import Auction from "../Auction"
 import ButtonDropdown from "@cloudscape-design/components/button-dropdown"
-import { SpaceBetween } from "@cloudscape-design/components"
+import { Badge, SpaceBetween } from "@cloudscape-design/components"
 import { AlertContext } from "../../App"
 
-const fetchAuctions = async () => {
+const fetchAuctions = async (createdAtOrder: CreatedAtOrder) => {
   const headers = {
     Authorization: "Basic dGVzdDp0ZXN0",
   }
-  const result = await fetch("http://localhost:8080/api/v1/auctions", {
-    method: "GET",
-    headers: headers,
-  })
+  const result = await fetch(
+    `http://localhost:8080/api/v1/auctions?closingTime=${createdAtOrder}`,
+    {
+      method: "GET",
+      headers: headers,
+    }
+  )
   const data = await result.json()
 
   if (!result.ok) {
@@ -25,10 +28,13 @@ const fetchAuctions = async () => {
 }
 
 const AuctionListings = () => {
-  const { data, error, isError, isLoading, isSuccess } = useQuery<
+  const [createdAtOrder, setCreatedAtOrder] = useState(CreatedAtOrder.LATEST)
+  const [bidsOrder, setBidsOrder] = useState(BidsOrder.MOST)
+
+  const { data, error, isError, isLoading, isSuccess, refetch } = useQuery<
     Array<Auction>,
     Error
-  >("queryAllAuctions", fetchAuctions, {
+  >("queryAllAuctions", () => fetchAuctions(createdAtOrder), {
     retry: false,
     refetchOnWindowFocus: false,
   })
@@ -45,6 +51,10 @@ const AuctionListings = () => {
     }
   }, [isError])
 
+  useEffect(() => {
+    refetch()
+  }, [bidsOrder, createdAtOrder])
+
   if (isError) {
     return <b>Could not fetch the data</b>
   }
@@ -56,7 +66,12 @@ const AuctionListings = () => {
   return (
     <>
       <div>
-        <AuctionSelectionDropdown />
+        <AuctionSelectionDropdown
+          createdAtOrder={createdAtOrder}
+          setCreatedAtOrder={setCreatedAtOrder}
+          bidsOrder={bidsOrder}
+          setBidsOrder={setBidsOrder}
+        />
       </div>
 
       <div>
@@ -74,27 +89,66 @@ const AuctionListings = () => {
   )
 }
 
-const AuctionSelectionDropdown = () => {
+enum CreatedAtOrder {
+  LATEST = "asc",
+  OLDEST = "desc",
+}
+
+enum BidsOrder {
+  LEAST = "least",
+  MOST = "most",
+}
+
+interface AuctionSelectionDropdownProps {
+  createdAtOrder: CreatedAtOrder
+  setCreatedAtOrder: React.SetStateAction<any>
+  bidsOrder: BidsOrder
+  setBidsOrder: React.SetStateAction<any>
+}
+
+const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
   return (
     <>
       <SpaceBetween size="l" direction="vertical">
-        <ButtonDropdown
-          items={[
-            { text: "Latest", id: "rm", disabled: false },
-            { text: "Oldest", id: "rm", disabled: false },
-          ]}
-        >
-          Sort By Created
-        </ButtonDropdown>
+        <SpaceBetween size={"l"} direction="horizontal">
+          <ButtonDropdown
+            items={[
+              { text: "Latest", id: CreatedAtOrder.LATEST, disabled: false },
+              { text: "Oldest", id: CreatedAtOrder.OLDEST, disabled: false },
+            ]}
+            onItemClick={(e) => {
+              const selection = e.detail.id
+              props.setCreatedAtOrder(selection as CreatedAtOrder)
+            }}
+          >
+            Sort By Created
+          </ButtonDropdown>
+          <Badge
+            color={
+              props.createdAtOrder === CreatedAtOrder.LATEST ? "green" : "red"
+            }
+          >
+            {props.createdAtOrder}
+          </Badge>
+        </SpaceBetween>
 
-        <ButtonDropdown
-          items={[
-            { text: "Least", id: "rm", disabled: false },
-            { text: "Most", id: "rm", disabled: false },
-          ]}
-        >
-          Sort By Bids
-        </ButtonDropdown>
+        <SpaceBetween size={"l"} direction="horizontal">
+          <ButtonDropdown
+            items={[
+              { text: "Least", id: BidsOrder.LEAST, disabled: false },
+              { text: "Most", id: BidsOrder.MOST, disabled: false },
+            ]}
+            onItemClick={(e) => {
+              const selection = e.detail.id
+              props.setBidsOrder(selection as BidsOrder)
+            }}
+          >
+            Sort By Bids
+          </ButtonDropdown>
+          <Badge color={props.bidsOrder === BidsOrder.MOST ? "red" : "green"}>
+            {props.bidsOrder}
+          </Badge>
+        </SpaceBetween>
       </SpaceBetween>
     </>
   )
