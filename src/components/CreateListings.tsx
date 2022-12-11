@@ -65,8 +65,7 @@ const CreateListing = () => {
       return createAuction(newAuction)
     },
     onError: (error, variables, context) => {
-      // An error happened!
-      console.log(`An error`)
+      console.error(`An error occurred ${error}`)
       setAlertNotification({
         isVisible: true,
         type: "error",

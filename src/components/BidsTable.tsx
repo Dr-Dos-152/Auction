@@ -41,8 +41,7 @@ const BidsTable = (props: { data: Array<Bid>; isLoading: boolean }) => {
       empty={
         <Box textAlign="center" color="inherit">
           <SpaceBetween size={"s"}>
-            <b>No bids</b>
-            <Button>Bid on Auction</Button>
+            <b>No bids yet, try placing one!</b>
           </SpaceBetween>
         </Box>
       }

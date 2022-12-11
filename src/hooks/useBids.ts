@@ -27,15 +27,14 @@ export interface Bid {
 }
 
 const useBids = (auctionId: string) => {
-  const { data, isLoading, isError, error } = useQuery<Array<Bid>, Error>(
-    "fetchBids",
-    () => fetchBids(auctionId),
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
+  const { data, isLoading, isError, error, refetch } = useQuery<
+    Array<Bid>,
+    Error
+  >("fetchBids", () => fetchBids(auctionId), {
+    refetchOnWindowFocus: false,
+  })
 
-  return { data, isLoading, isError, error }
+  return { data, isLoading, isError, error, refetch }
 }
 
 export default useBids

@@ -1,16 +1,23 @@
-import { SpaceBetween } from "@cloudscape-design/components"
+import {
+  Form,
+  FormField,
+  Input,
+  Modal,
+  SpaceBetween,
+} from "@cloudscape-design/components"
 import Box from "@cloudscape-design/components/box"
 import Button from "@cloudscape-design/components/button"
 import Container from "@cloudscape-design/components/container"
 import Header from "@cloudscape-design/components/header"
 import Spinner from "@cloudscape-design/components/spinner"
 import Table from "@cloudscape-design/components/table"
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { AlertContext } from "../App"
 import useAuctionDetail, { ItemDetail } from "../hooks/useAuctionDetail"
 import useBids, { Bid } from "../hooks/useBids"
 import BidsTable from "./BidsTable"
+import PlaceBidModal from "./PlaceBidModal"
 
 const AuctionDetail = () => {
   const { auctionId } = useParams()
@@ -63,13 +70,45 @@ const AuctionDetail = () => {
 }
 
 const Bids = (props: { auctionId: string }) => {
-  const { data: bidsData, isLoading, isError, error } = useBids(props.auctionId)
+  const {
+    data: bidsData,
+    isLoading,
+    isError,
+    refetch,
+  } = useBids(props.auctionId)
+  const [showPlaceBidModal, setShowPlaceBidModal] = useState(false)
 
   if (isError) {
     return <div>Error loading bids</div>
   }
 
-  return <BidsTable data={bidsData!} isLoading={isLoading} />
+  return (
+    <>
+      {showPlaceBidModal && (
+        <PlaceBidModal
+          showPlaceBidModal={showPlaceBidModal}
+          setShowPlaceBidModal={setShowPlaceBidModal}
+          auctionId={props.auctionId}
+          refetchBidsData={refetch}
+        />
+      )}
+      <SpaceBetween size={"l"}>
+        <BidsTable data={bidsData!} isLoading={isLoading} />
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Button variant="primary" onClick={(e) => setShowPlaceBidModal(true)}>
+            Place a bid
+          </Button>
+        </div>
+      </SpaceBetween>
+    </>
+  )
 }
 
 const Item = (props: ItemDetail) => {
