@@ -23,6 +23,7 @@ export interface Bid {
   placedAt: Date
   amount: number
   placedByUsername: string
+  comment?: string
 }
 
 const useBids = (auctionId: string) => {

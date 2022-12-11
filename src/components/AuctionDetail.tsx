@@ -65,11 +65,11 @@ const AuctionDetail = () => {
 const Bids = (props: { auctionId: string }) => {
   const { data: bidsData, isLoading, isError, error } = useBids(props.auctionId)
 
-  if (isLoading) {
-    return <Spinner />
+  if (isError) {
+    return <div>Error loading bids</div>
   }
 
-  return <BidsTable />
+  return <BidsTable data={bidsData!} isLoading={isLoading} />
 }
 
 const Item = (props: ItemDetail) => {

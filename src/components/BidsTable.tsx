@@ -5,22 +5,28 @@ import {
   Button,
   Header,
 } from "@cloudscape-design/components"
+import moment from "moment"
+import { Bid } from "../hooks/useBids"
 
-const BidsTable = () => {
+const BidsTable = (props: { data: Array<Bid>; isLoading: boolean }) => {
   return (
     <Table
+      loading={props.isLoading}
       columnDefinitions={[
         {
           id: "placedBy",
           header: "Placed By",
-          cell: (item) => item.placedBy,
-          sortingField: "placedBy",
+          cell: (item) => item.placedByUsername,
         },
         {
-          id: "comments",
+          id: "placedAt",
+          header: "Placed At",
+          cell: (item) => moment(item.placedAt).fromNow(),
+        },
+        {
+          id: "comment",
           header: "Comment",
-          cell: (item) => item.comments,
-          sortingField: "comments",
+          cell: (item) => item.comment || "-",
         },
         {
           id: "amount",
@@ -28,13 +34,9 @@ const BidsTable = () => {
           cell: (item) => <b style={{ color: "green" }}>${item.amount}</b>,
         },
       ]}
-      items={[
-        {
-          placedBy: "shubdhi",
-          comments: "I like it",
-          amount: 101.42,
-        },
-      ]}
+      resizableColumns
+      sortingDisabled
+      items={props.data}
       loadingText="Loading bids"
       empty={
         <Box textAlign="center" color="inherit">
