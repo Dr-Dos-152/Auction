@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import { useMutation } from "react-query"
 import { AlertContext } from "../App"
+import { Spinner } from "@cloudscape-design/components"
 
 interface BidCreateRequest {
   auctionId: string
@@ -45,8 +46,17 @@ const useCreateBid = (args: { handleSuccess: Function }) => {
       setAlertNotification({
         isVisible: true,
         type: "success",
-        header: "Successfully placing a bid",
+        header: "Successfully placed a bid",
         content: "",
+      })
+      args.handleSuccess()
+    },
+    onMutate: () => {
+      setAlertNotification({
+        isVisible: true,
+        type: "info",
+        header: "Attempting to place a bid",
+        content: <Spinner />,
       })
       args.handleSuccess()
     },

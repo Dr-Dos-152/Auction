@@ -3,7 +3,7 @@ import "./App.css"
 import "@cloudscape-design/global-styles/index.css"
 import Button from "@cloudscape-design/components/button"
 import TopNavigation from "@cloudscape-design/components/top-navigation"
-import { AppLayout } from "@cloudscape-design/components"
+import { AppLayout, Grid } from "@cloudscape-design/components"
 import Home from "./components/home/Home"
 import Footer from "./components/Footer"
 import "@cloudscape-design/global-styles/index.css"
@@ -18,7 +18,7 @@ interface Alert {
   header: string
   content: ReactNode
   isVisible: boolean
-  type: "error" | "success"
+  type: "error" | "success" | "info"
 }
 
 interface AlertContextType {
@@ -102,16 +102,18 @@ function App() {
             ]}
           />
           {alertNotification && (
-            <Alert
-              onDismiss={() => setAlertNotification(null)}
-              visible={alertNotification?.isVisible}
-              dismissAriaLabel="Close alert"
-              header={alertNotification.header}
-              type={alertNotification.type}
-              dismissible
-            >
-              {alertNotification.content}
-            </Alert>
+            <div style={{ margin: "1rem 0.5rem 0 0.5rem" }}>
+              <Alert
+                onDismiss={() => setAlertNotification(null)}
+                visible={alertNotification?.isVisible}
+                dismissAriaLabel="Close alert"
+                header={alertNotification.header}
+                type={alertNotification.type}
+                dismissible
+              >
+                {alertNotification.content}
+              </Alert>
+            </div>
           )}
           <AppLayout
             footerSelector="#footer"
