@@ -18,8 +18,12 @@ import { createAuction } from "../hooks/useCreateAuction"
 import DatePicker from "@cloudscape-design/components/date-picker"
 import moment from "moment"
 
+const MAX_ALLOWED_FILE_SIZE_IN_BYTES = 1000000
+
 const CreateListing = () => {
   const navigate = useNavigate()
+
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
 
   const [categories, setCategories] = useState<
     { label: string; value: string }[]
@@ -40,6 +44,7 @@ const CreateListing = () => {
     name: "",
     description: "",
     closingTime: "",
+    selectedImage: "",
   })
 
   // Item info
@@ -61,6 +66,7 @@ const CreateListing = () => {
       auction: Auction
       item: Item
       categoryId: string
+      image?: File
     }) => {
       return createAuction(newAuction)
     },
@@ -151,24 +157,45 @@ const CreateListing = () => {
     })
   }
 
+  const isErrorInImageUpload = () => {
+    if (selectedImage === null) {
+      return false
+    }
+    return selectedImage.size > MAX_ALLOWED_FILE_SIZE_IN_BYTES
+  }
+
   const handleClickSubmit = () => {
     const auctionResult = auctionSchema.safeParse(auctionInfo)
     const itemResult = itemSchema.safeParse(itemInfo)
 
-    if (itemResult.success && auctionResult.success && category?.value) {
+    if (
+      itemResult.success &&
+      auctionResult.success &&
+      category?.value &&
+      !isErrorInImageUpload()
+    ) {
       const auctionData = auctionResult.data
       const itemData = itemResult.data
       createAuctionMutation.mutate({
         auction: auctionData,
         item: itemData,
         categoryId: category.value,
+        image: selectedImage ?? undefined,
       })
       return
     }
 
+    if (isErrorInImageUpload()) {
+      setAuctionInfoErrors((prevAuctionInfoErrors) => {
+        return {
+          ...prevAuctionInfoErrors,
+          selectedImage: "Please select a smaller image",
+        }
+      })
+    }
+
     if (!auctionResult.success) {
       const errors = auctionResult.error.flatten()
-      console.log(errors)
       const fieldErrors = errors.fieldErrors
       forOwn(fieldErrors, (value, key) => {
         setAuctionInfoErrors((prevAuctionInfoErrors) => {
@@ -312,6 +339,35 @@ const CreateListing = () => {
                 onChange={(e) =>
                   handleItemInfoChange("startingPrice", e.detail.value)
                 }
+              />
+            </FormField>
+
+            <FormField
+              label="Image"
+              description="Adding an image equals more bids!"
+              errorText={auctionInfoErrors.selectedImage}
+            >
+              {selectedImage && (
+                <div style={{ margin: "1rem 0 1rem 0" }}>
+                  <img
+                    alt="not fount"
+                    height={"250px"}
+                    src={URL.createObjectURL(selectedImage)}
+                  />
+                  <br />
+                </div>
+              )}
+              <input
+                type={"file"}
+                onChange={(e) => {
+                  setAuctionInfoErrors((prevAuctionInfoErrors) => {
+                    return {
+                      ...prevAuctionInfoErrors,
+                      selectedImage: "",
+                    }
+                  })
+                  setSelectedImage(e.target.files && e.target.files[0])
+                }}
               />
             </FormField>
           </SpaceBetween>

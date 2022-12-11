@@ -4,6 +4,7 @@ import Header from "@cloudscape-design/components/header"
 import style from "../styles/AuctionListings.module.scss"
 import AuctionItem, { Item } from "./AuctionItem"
 import { useNavigate } from "react-router-dom"
+import { auctionSchema } from "../schemas/auctionSchema"
 
 interface Auction {
   id: string
@@ -11,6 +12,7 @@ interface Auction {
   description: string
   item: Item
   closingTime: string
+  s3ImageURL?: string
 }
 
 const Auction = (props: Auction) => {
@@ -29,9 +31,8 @@ const Auction = (props: Auction) => {
         <Header variant="h3" description={props.description}>
           <div className={style.auctionCardHeader}>
             <img
-              height={"100px"}
-              width={"100px"}
-              src="images/MichaelScott.png"
+              className={style.auctionCardImage}
+              src={props.s3ImageURL || "/images/No-Image-Placeholder.svg"}
             />
             <b>{props.name}</b>
           </div>

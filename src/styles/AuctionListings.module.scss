@@ -8,6 +8,12 @@
         display: flex;
         flex-direction: column;
     }
+    .auctionCardImage {
+        height: 250px;
+        border-radius: 10% !important;
+        margin-bottom: 1rem;
+        display: flex;
+    }
 }
 
 .auctionCard:hover {
