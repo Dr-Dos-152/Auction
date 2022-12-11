@@ -41,7 +41,6 @@ const AuctionListings = () => {
   const [createdAtOrder, setCreatedAtOrder] = useState(CreatedAtOrder.LATEST)
   const [bidsOrder, setBidsOrder] = useState(BidsOrder.MOST)
   const [currentPageIndex, setCurrentPageIndex] = useState(1)
-  console.log("pageIndex", currentPageIndex)
 
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery<
     { auctions: Array<Auction>; numPages: number },

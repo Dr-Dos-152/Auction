@@ -8,6 +8,7 @@ import "./index.css"
 import ErrorPage from "./components/ErrorPage"
 import Home from "./components/home/Home"
 import CreateListing from "./components/CreateListings"
+import AuctionDetail from "./components/AuctionDetail"
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/create-listing",
         element: <CreateListing />,
+      },
+      {
+        path: "/auction/:auctionId",
+        element: <AuctionDetail />,
       },
     ],
   },
