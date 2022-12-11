@@ -59,6 +59,10 @@ const AuctionDetail = () => {
           </Header>
         }
       >
+        <img
+          height={"250px"}
+          src={auctionData?.s3ImageURL || "/images/No-Image-Placeholder.svg"}
+        />{" "}
         <Item {...auctionData!.item} />
       </Container>
 
