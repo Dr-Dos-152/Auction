@@ -1,10 +1,8 @@
 import React from "react"
-import Container from "@cloudscape-design/components/container"
 import Header from "@cloudscape-design/components/header"
 import style from "../styles/AuctionListings.module.scss"
 import AuctionItem, { Item } from "./AuctionItem"
 import { useNavigate } from "react-router-dom"
-import { auctionSchema } from "../schemas/auctionSchema"
 
 interface Auction {
   id: string
@@ -28,18 +26,17 @@ const Auction = (props: Auction) => {
       onClick={() => handleClickAuction(props.id)}
     >
       <div style={{ padding: "1rem" }}>
-        <Header variant="h3" description={props.description}>
-          <div className={style.auctionCardHeader}>
-            <div className={style.auctionCardImageContainer}>
-              <img
-                className={style.auctionCardImage}
-                src={props.s3ImageURL || "/images/No-Image-Placeholder.svg"}
-              />
-            </div>
+        <div className={style.auctionCardHeader}>
+          <img
+            className={style.auctionCardImage}
+            src={props.s3ImageURL || "/images/No-Image-Placeholder.svg"}
+          />
 
-            <b>{props.name}</b>
-          </div>
-        </Header>
+          <b>{props.name}</b>
+        </div>
+
+        <p>{props.description}</p>
+
         <div>
           <AuctionItem {...props.item} />
           <div>Closes {props.closingTime}</div>
