@@ -17,13 +17,22 @@ import { Item, itemSchema } from "../schemas/itemSchema"
 import { createAuction } from "../hooks/useCreateAuction"
 import DatePicker from "@cloudscape-design/components/date-picker"
 import moment from "moment"
+import Avatar from "react-avatar-edit"
+import { dataUrlToFile } from "../utils/fileUtils"
 
 const MAX_ALLOWED_FILE_SIZE_IN_BYTES = 1000000
+const IMAGE_NAME = "auctionItem"
 
 const CreateListing = () => {
   const navigate = useNavigate()
 
-  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imageSource, setImageSource] = useState<{
+    src: string
+    preview: null | string
+  }>({
+    src: "",
+    preview: null,
+  })
 
   const [categories, setCategories] = useState<
     { label: string; value: string }[]
@@ -87,7 +96,6 @@ const CreateListing = () => {
         content: "You have listed an item",
       })
       setTimeout(() => {
-        console.log("redirecting")
         navigate("/")
       }, 1500)
     },
@@ -157,22 +165,27 @@ const CreateListing = () => {
     })
   }
 
-  const isErrorInImageUpload = () => {
-    if (selectedImage === null) {
+  const isErrorInImageUpload = (file: File | null) => {
+    if (file === null) {
       return false
     }
-    return selectedImage.size > MAX_ALLOWED_FILE_SIZE_IN_BYTES
+    return file.size > MAX_ALLOWED_FILE_SIZE_IN_BYTES
   }
 
-  const handleClickSubmit = () => {
+  const handleClickSubmit = async () => {
     const auctionResult = auctionSchema.safeParse(auctionInfo)
     const itemResult = itemSchema.safeParse(itemInfo)
+
+    let imageFile: File | null = null
+    if (imageSource.preview !== null) {
+      imageFile = await dataUrlToFile(imageSource.preview, IMAGE_NAME)
+    }
 
     if (
       itemResult.success &&
       auctionResult.success &&
       category?.value &&
-      !isErrorInImageUpload()
+      !isErrorInImageUpload(imageFile)
     ) {
       const auctionData = auctionResult.data
       const itemData = itemResult.data
@@ -180,12 +193,14 @@ const CreateListing = () => {
         auction: auctionData,
         item: itemData,
         categoryId: category.value,
-        image: selectedImage ?? undefined,
+        image: imageFile ?? undefined,
       })
       return
     }
 
-    if (isErrorInImageUpload()) {
+    window.scrollTo(0, 0)
+
+    if (isErrorInImageUpload(imageFile)) {
       setAuctionInfoErrors((prevAuctionInfoErrors) => {
         return {
           ...prevAuctionInfoErrors,
@@ -347,28 +362,44 @@ const CreateListing = () => {
               description="Adding an image equals more bids!"
               errorText={auctionInfoErrors.selectedImage}
             >
-              {selectedImage && (
-                <div style={{ margin: "1rem 0 1rem 0" }}>
-                  <img
-                    alt="not fount"
-                    height={"250px"}
-                    src={URL.createObjectURL(selectedImage)}
-                  />
-                  <br />
-                </div>
-              )}
-              <input
-                type={"file"}
-                onChange={(e) => {
-                  setAuctionInfoErrors((prevAuctionInfoErrors) => {
-                    return {
-                      ...prevAuctionInfoErrors,
-                      selectedImage: "",
-                    }
-                  })
-                  setSelectedImage(e.target.files && e.target.files[0])
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
-              />
+              >
+                <div>
+                  <Avatar
+                    width={250}
+                    height={390}
+                    exportAsSquare
+                    onCrop={(preview) => {
+                      setImageSource((prevImageSource) => {
+                        return {
+                          ...prevImageSource,
+                          preview: preview,
+                        }
+                      })
+                    }}
+                    onClose={() => {
+                      setImageSource((prevImageSource) => {
+                        return {
+                          ...prevImageSource,
+                          preview: null,
+                        }
+                      })
+                    }}
+                  />
+                </div>
+
+                {imageSource.preview && (
+                  <div style={{ margin: "1rem" }}>
+                    <img src={imageSource.preview} alt={"Preview"} />
+                  </div>
+                )}
+              </div>
             </FormField>
           </SpaceBetween>
         </Container>

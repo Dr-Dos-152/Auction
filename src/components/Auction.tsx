@@ -30,10 +30,13 @@ const Auction = (props: Auction) => {
       <div style={{ padding: "1rem" }}>
         <Header variant="h3" description={props.description}>
           <div className={style.auctionCardHeader}>
-            <img
-              className={style.auctionCardImage}
-              src={props.s3ImageURL || "/images/No-Image-Placeholder.svg"}
-            />
+            <div className={style.auctionCardImageContainer}>
+              <img
+                className={style.auctionCardImage}
+                src={props.s3ImageURL || "/images/No-Image-Placeholder.svg"}
+              />
+            </div>
+
             <b>{props.name}</b>
           </div>
         </Header>
