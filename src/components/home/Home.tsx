@@ -20,9 +20,7 @@ const Home = () => {
             { colspan: { s: 2, xxs: 12 } },
           ]}
         >
-          <div style={{ margin: "0 5rem" }}>
-            <AuctionListings />
-          </div>
+          <AuctionListings />
           <div>
             <Link to={"/create-listing"}>
               <Button variant="link">Create Listing</Button>

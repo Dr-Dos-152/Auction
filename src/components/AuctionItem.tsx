@@ -2,7 +2,6 @@ import Badge from "@cloudscape-design/components/badge"
 
 export interface Item {
   description: string
-  currentBid?: number
   startingPrice: number
   category: { id: string; name: string }
 }
@@ -12,8 +11,9 @@ const AuctionItem = (props: Item) => {
     <>
       <div>
         <p>{props.description}</p>
-        <div>Starting Price: {props.startingPrice}</div>
-        <div>Current Bid: {props.currentBid ?? "No current bids"}</div>
+        <div>
+          Starting Price: <span className="price">${props.startingPrice}</span>
+        </div>
         <Badge color="grey">{props.category?.name}</Badge>
       </div>
     </>

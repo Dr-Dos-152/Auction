@@ -11,6 +11,7 @@ interface Auction {
   item: Item
   closingTime: string
   s3ImageURL?: string
+  currentHighestBid?: Bid
 }
 
 const Auction = (props: Auction) => {
@@ -39,7 +40,13 @@ const Auction = (props: Auction) => {
 
         <div>
           <AuctionItem {...props.item} />
-          <div>Closes {props.closingTime}</div>
+          <div className={style.currentHighestBid}>
+            Highest Bid:{" "}
+            <b className="price">${props?.currentHighestBid?.amount}</b>
+          </div>
+          <div className={style.closingDateText}>
+            Closes {props.closingTime}
+          </div>
         </div>
       </div>
     </div>

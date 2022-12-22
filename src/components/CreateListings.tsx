@@ -396,7 +396,11 @@ const CreateListing = () => {
 
                 {imageSource.preview && (
                   <div style={{ margin: "1rem" }}>
-                    <img src={imageSource.preview} alt={"Preview"} />
+                    <img
+                      height={"250px"}
+                      src={imageSource.preview}
+                      alt={"Preview"}
+                    />
                   </div>
                 )}
               </div>

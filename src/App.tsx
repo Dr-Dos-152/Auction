@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useState } from "react"
-import "./App.css"
+import "./App.scss"
 import "@cloudscape-design/global-styles/index.css"
 import Button from "@cloudscape-design/components/button"
 import TopNavigation from "@cloudscape-design/components/top-navigation"
