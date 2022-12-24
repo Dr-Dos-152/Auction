@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import { useMutation } from "react-query"
 import { AlertContext } from "../App"
 import { Spinner } from "@cloudscape-design/components"
+import { StatusCodes } from "http-status-codes"
 
 interface BidCreateRequest {
   auctionId: string
@@ -21,10 +22,14 @@ const fetchCreateBid = async (request: BidCreateRequest) => {
       body: JSON.stringify(request),
     }
   )
-  if (!response.ok) {
+  if (response.status === StatusCodes.BAD_REQUEST) {
+    const responseData = await response.json()
     throw Error(
-      `Could not place a bid! Failed with status code: ${response.status} (${response.statusText})`
+      `Could not place a bid. Reason: ${responseData.message ?? "Unknown"}`
     )
+  }
+  if (!response.ok) {
+    throw Error(`Could not place a bid`)
   }
 }
 
@@ -33,13 +38,13 @@ const useCreateBid = (args: { handleSuccess: Function }) => {
   const createBidMutation = useMutation({
     mutationFn: (bidCreateRequest: BidCreateRequest) =>
       fetchCreateBid(bidCreateRequest),
-    onError: (e) => {
+    onError: (e: Error) => {
       console.log(`An error occured: ${e}`)
       setAlertNotification({
         isVisible: true,
         type: "error",
         header: "Error placing a bid",
-        content: "Couldn't place a bid. Please try again later.",
+        content: e.message,
       })
     },
     onSuccess: (e) => {
