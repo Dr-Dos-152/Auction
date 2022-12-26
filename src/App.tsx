@@ -88,12 +88,13 @@ function App() {
                 title: "Settings",
                 items: [
                   {
-                    id: "settings-org",
-                    text: "Organizational settings",
+                    id: "profile-settings",
+                    text: "View/Edit Profile",
+                    href: "/profile",
                   },
                   {
-                    id: "settings-project",
-                    text: "Project settings",
+                    id: "theme-settings",
+                    text: "Change theme",
                   },
                 ],
               },

@@ -9,6 +9,7 @@ import {
   Input,
   SpaceBetween,
   Spinner,
+  Textarea,
 } from "@cloudscape-design/components"
 import style from "../styles/Profile.module.scss"
 import Avatar from "react-avatar-edit"
@@ -57,34 +58,33 @@ const Profile = () => {
           { colspan: { m: 8, default: 12 } },
         ]}
       >
-        <Container header={<h4>Profile Picture</h4>}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <h4>Profile Picture</h4>
+          <Avatar
+            width={250}
+            height={250}
+            exportAsSquare
+            onCrop={(preview) => {
+              setImageSource(preview)
             }}
-          >
-            <Avatar
-              width={250}
-              height={250}
-              exportAsSquare
-              onCrop={(preview) => {
-                setImageSource(preview)
-              }}
-              onClose={() => {
-                setImageSource(null)
-              }}
-            />
+            onClose={() => {
+              setImageSource(null)
+            }}
+          />
 
-            {imageSource && (
-              <div style={{ margin: "1rem" }}>
-                <img height={"250px"} src={imageSource} alt={"Preview"} />
-              </div>
-            )}
-          </div>
-        </Container>
+          {imageSource && (
+            <div style={{ margin: "1rem" }}>
+              <img height={"250px"} src={imageSource} alt={"Preview"} />
+            </div>
+          )}
+        </div>
 
         <Form header={<h2>My Profile</h2>}>
           <SpaceBetween size={"m"} direction="vertical">
@@ -107,7 +107,7 @@ const Profile = () => {
               </FormField>
             </div>
             <FormField label="Description">
-              <Input
+              <Textarea
                 placeholder="I am..."
                 value={profileInfo!.description || ""}
                 onChange={(e) =>
