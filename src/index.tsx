@@ -9,6 +9,7 @@ import ErrorPage from "./components/ErrorPage"
 import Home from "./components/home/Home"
 import CreateListing from "./components/CreateListings"
 import AuctionDetail from "./components/AuctionDetail"
+import Profile from "./components/Profile"
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/auction/:auctionId",
         element: <AuctionDetail />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },
