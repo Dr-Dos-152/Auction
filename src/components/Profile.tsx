@@ -7,6 +7,7 @@ import {
   FormField,
   Grid,
   Input,
+  SpaceBetween,
   Spinner,
 } from "@cloudscape-design/components"
 import style from "../styles/Profile.module.scss"
@@ -57,27 +58,36 @@ const Profile = () => {
         ]}
       >
         <Container header={<h4>Profile Picture</h4>}>
-          <Avatar
-            width={250}
-            height={250}
-            exportAsSquare
-            onCrop={(preview) => {
-              setImageSource(preview)
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
             }}
-            onClose={() => {
-              setImageSource(null)
-            }}
-          />
+          >
+            <Avatar
+              width={250}
+              height={250}
+              exportAsSquare
+              onCrop={(preview) => {
+                setImageSource(preview)
+              }}
+              onClose={() => {
+                setImageSource(null)
+              }}
+            />
 
-          {imageSource && (
-            <div style={{ margin: "1rem" }}>
-              <img height={"250px"} src={imageSource} alt={"Preview"} />
-            </div>
-          )}
+            {imageSource && (
+              <div style={{ margin: "1rem" }}>
+                <img height={"250px"} src={imageSource} alt={"Preview"} />
+              </div>
+            )}
+          </div>
         </Container>
 
-        <div>
-          <Form header={<h2>My Profile</h2>}>
+        <Form header={<h2>My Profile</h2>}>
+          <SpaceBetween size={"m"} direction="vertical">
             <div className={style.nameContainer}>
               <FormField label="First Name">
                 <Input
@@ -107,8 +117,8 @@ const Profile = () => {
             </FormField>
 
             <Button>Save</Button>
-          </Form>
-        </div>
+          </SpaceBetween>
+        </Form>
       </Grid>
     </Container>
   )
