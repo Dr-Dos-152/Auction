@@ -1,16 +1,8 @@
-import {
-  Form,
-  FormField,
-  Input,
-  Modal,
-  SpaceBetween,
-} from "@cloudscape-design/components"
-import Box from "@cloudscape-design/components/box"
+import { Grid, SpaceBetween } from "@cloudscape-design/components"
 import Button from "@cloudscape-design/components/button"
 import Container from "@cloudscape-design/components/container"
 import Header from "@cloudscape-design/components/header"
 import Spinner from "@cloudscape-design/components/spinner"
-import Table from "@cloudscape-design/components/table"
 import React, { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { AlertContext } from "../App"
@@ -18,6 +10,8 @@ import useAuctionDetail, { ItemDetail } from "../hooks/useAuctionDetail"
 import useBids, { Bid } from "../hooks/useBids"
 import BidsTable from "./BidsTable"
 import PlaceBidModal from "./PlaceBidModal"
+import useUserDetails from "../hooks/useUserProfile"
+import UserDetail from "./UserDetail"
 
 const AuctionDetail = () => {
   const { auctionId } = useParams()
@@ -25,28 +19,27 @@ const AuctionDetail = () => {
 
   const {
     data: auctionData,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
+    isLoading: isLoadingAuction,
+    isError: isErrorAuction,
+    error: auctionError,
   } = useAuctionDetail(auctionId as string)
 
   useEffect(() => {
-    if (isError) {
+    if (isErrorAuction) {
       setAlertNotification({
         isVisible: true,
         header: "Could not fetch Auction",
-        content: `${error}`,
+        content: `${auctionError}`,
         type: "error",
       })
     }
-  }, [isError])
+  }, [isErrorAuction])
 
-  if (isLoading) {
+  if (isLoadingAuction) {
     return <Spinner />
   }
 
-  if (isError) {
+  if (isErrorAuction) {
     return <div>An error occurred</div>
   }
 
@@ -59,11 +52,24 @@ const AuctionDetail = () => {
           </Header>
         }
       >
-        <img
-          height={"250px"}
-          src={auctionData?.s3ImageURL || "/images/No-Image-Placeholder.svg"}
-        />{" "}
-        <Item {...auctionData!.item} />
+        <Grid
+          gridDefinition={[
+            { colspan: { default: 12, s: 9 } },
+            { colspan: { default: 12, s: 3 } },
+          ]}
+        >
+          <div>
+            <img
+              height={"250px"}
+              src={
+                auctionData?.s3ImageURL || "/images/No-Image-Placeholder.svg"
+              }
+            />{" "}
+            <Item {...auctionData!.item} />
+          </div>
+
+          <UserDetail />
+        </Grid>
       </Container>
 
       <div style={{ marginTop: "2rem" }}>

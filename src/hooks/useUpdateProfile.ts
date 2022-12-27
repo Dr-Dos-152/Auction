@@ -57,6 +57,14 @@ const useUpdateProfile = () => {
         content: e.message,
       })
     },
+    onSuccess: () => {
+      setAlertNotification({
+        isVisible: true,
+        type: "success",
+        header: "Updated profile information successfully",
+        content: "Changes applied",
+      })
+    },
   })
   return updateProfileMutation
 }
