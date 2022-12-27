@@ -13,16 +13,16 @@ import {
 } from "@cloudscape-design/components"
 import style from "../styles/Profile.module.scss"
 import Avatar from "react-avatar-edit"
+import useUpdateProfile from "../hooks/useUpdateProfile"
+import { dataUrlToFile } from "../utils/fileUtils"
 
-/**
- * User Profile
- * 1. They can edit name, description
- * 2. They can change their profile picture
- */
+const IMAGE_NAME = "profile-picture"
+
 const Profile = () => {
   const { data: profile, isLoading, isError, isSuccess } = useProfile()
   const [profileInfo, setProfileInfo] = useState<Profile | null>(null)
   const [imageSource, setImageSource] = useState<null | string>(null)
+  const updateProfileMutation = useUpdateProfile()
 
   useEffect(() => {
     if (isSuccess) {
@@ -36,6 +36,21 @@ const Profile = () => {
         ...prevProfileInfo,
         [filterId]: value,
       } as Profile
+    })
+    // TODO: zod validation
+  }
+
+  const handleClickSubmit = async () => {
+    console.log(profileInfo)
+    let imageFile: File | null = null
+    if (imageSource !== null) {
+      imageFile = await dataUrlToFile(imageSource, IMAGE_NAME)
+    }
+    updateProfileMutation.mutate({
+      image: imageFile ?? undefined,
+      firstName: profileInfo?.firstName,
+      lastName: profileInfo?.lastName,
+      description: profileInfo?.description ?? undefined,
     })
   }
 
@@ -64,6 +79,15 @@ const Profile = () => {
           }}
         >
           <h4>Profile Picture</h4>
+
+          <div style={{ margin: "1rem" }}>
+            <img
+              height={"250px"}
+              src={imageSource ?? profile?.profilePictureURL ?? ""}
+              alt={"Preview"}
+            />
+          </div>
+
           <Avatar
             width={250}
             height={250}
@@ -75,14 +99,6 @@ const Profile = () => {
               setImageSource(null)
             }}
           />
-
-          <div style={{ margin: "1rem" }}>
-            <img
-              height={"250px"}
-              src={imageSource ?? profile?.profilePictureURL ?? ""}
-              alt={"Preview"}
-            />
-          </div>
         </div>
 
         <Form header={<h2>My Profile</h2>}>
@@ -115,7 +131,7 @@ const Profile = () => {
               />
             </FormField>
 
-            <Button>Save</Button>
+            <Button onClick={handleClickSubmit}>Save</Button>
           </SpaceBetween>
         </Form>
       </Grid>

@@ -12,7 +12,35 @@ interface ProfileUpdateRequest {
 const fetchUpdateProfile = async (
   profileUpdateRequest: ProfileUpdateRequest
 ) => {
-  // api call here
+  const requestBody = JSON.stringify({
+    firstName: profileUpdateRequest.firstName,
+    lastName: profileUpdateRequest.lastName,
+    description: profileUpdateRequest.description,
+  })
+  const formData = new FormData()
+  if (profileUpdateRequest.image) {
+    formData.append("image", profileUpdateRequest.image)
+  }
+  formData.append(
+    "profile",
+    new Blob([requestBody], {
+      type: "application/json",
+    })
+  )
+
+  const response = await fetch("http://localhost:8080/api/v1/profile/", {
+    method: "PATCH",
+    headers: {
+      Authorization: "Basic dGVzdDp0ZXN0",
+    },
+    body: formData,
+  })
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+
+  return await response.json()
 }
 
 const useUpdateProfile = () => {
@@ -20,6 +48,15 @@ const useUpdateProfile = () => {
   const updateProfileMutation = useMutation({
     mutationFn: (profileUpdateRequest: ProfileUpdateRequest) =>
       fetchUpdateProfile(profileUpdateRequest),
+    onError: (e: Error) => {
+      console.error(`An error occured: ${e}`)
+      setAlertNotification({
+        isVisible: true,
+        type: "error",
+        header: "Error updating profile",
+        content: e.message,
+      })
+    },
   })
   return updateProfileMutation
 }

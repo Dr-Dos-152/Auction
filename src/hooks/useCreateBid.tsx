@@ -39,7 +39,7 @@ const useCreateBid = (args: { handleSuccess: Function }) => {
     mutationFn: (bidCreateRequest: BidCreateRequest) =>
       fetchCreateBid(bidCreateRequest),
     onError: (e: Error) => {
-      console.log(`An error occured: ${e}`)
+      console.error(`An error occured: ${e}`)
       setAlertNotification({
         isVisible: true,
         type: "error",
