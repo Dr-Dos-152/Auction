@@ -42,7 +42,11 @@ const Auction = (props: Auction) => {
           <AuctionItem {...props.item} />
           <div className={style.currentHighestBid}>
             Highest Bid:{" "}
-            <b className="price">${props?.currentHighestBid?.amount}</b>
+            <b className="price">
+              {props?.currentHighestBid?.amount
+                ? `$${props?.currentHighestBid?.amount}`
+                : "No bids yet"}
+            </b>
           </div>
           <div className={style.closingDateText}>
             Closes {props.closingTime}

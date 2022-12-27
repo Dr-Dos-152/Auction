@@ -24,10 +24,7 @@ const Profile = () => {
   const [profileInfo, setProfileInfo] = useState<Profile | null>(null)
   const [imageSource, setImageSource] = useState<null | string>(null)
 
-  console.log(profileInfo)
-
   useEffect(() => {
-    console.log("useEffect")
     if (isSuccess) {
       setProfileInfo(profile)
     }
@@ -79,11 +76,13 @@ const Profile = () => {
             }}
           />
 
-          {imageSource && (
-            <div style={{ margin: "1rem" }}>
-              <img height={"250px"} src={imageSource} alt={"Preview"} />
-            </div>
-          )}
+          <div style={{ margin: "1rem" }}>
+            <img
+              height={"250px"}
+              src={imageSource ?? profile?.profilePictureURL ?? ""}
+              alt={"Preview"}
+            />
+          </div>
         </div>
 
         <Form header={<h2>My Profile</h2>}>
