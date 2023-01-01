@@ -11,17 +11,14 @@ interface BidCreateRequest {
 }
 
 const fetchCreateBid = async (request: BidCreateRequest) => {
-  const response = await fetch(
-    `http://localhost:8080/api/v1/auction/${request.auctionId}/bid`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: "Basic dGVzdDp0ZXN0",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    }
-  )
+  const response = await fetch(`/api/v1/auction/${request.auctionId}/bid`, {
+    method: "POST",
+    headers: {
+      Authorization: "Basic c2h1YmRoaTp0ZXN0aW5n",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  })
   if (response.status === StatusCodes.BAD_REQUEST) {
     const responseData = await response.json()
     throw Error(

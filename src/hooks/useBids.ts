@@ -2,15 +2,12 @@ import React from "react"
 import { useQuery } from "react-query"
 
 const fetchBids = async (auctionId: string) => {
-  const response = await fetch(
-    `http://localhost:8080/api/v1/auction/${auctionId}/bids`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: "Basic dGVzdDp0ZXN0",
-      },
-    }
-  )
+  const response = await fetch(`/api/v1/auction/${auctionId}/bids`, {
+    method: "GET",
+    headers: {
+      Authorization: "Basic dGVzdDp0ZXN0",
+    },
+  })
   const data = await response.json()
   if (!response.ok) {
     throw Error(data.message)

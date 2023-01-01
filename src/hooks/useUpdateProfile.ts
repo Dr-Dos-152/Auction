@@ -28,7 +28,7 @@ const fetchUpdateProfile = async (
     })
   )
 
-  const response = await fetch("http://localhost:8080/api/v1/profile/", {
+  const response = await fetch("/api/v1/profile/", {
     method: "PATCH",
     headers: {
       Authorization: "Basic dGVzdDp0ZXN0",

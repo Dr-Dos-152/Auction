@@ -21,7 +21,7 @@ const fetchAuctions = async (
     Authorization: "Basic dGVzdDp0ZXN0",
   }
   const result = await fetch(
-    `http://localhost:8080/api/v1/auctions?pageNumber=${
+    `/api/v1/auctions?pageNumber=${
       currentPageIndex - 1
     }&createdAtOrder=${createdAtOrder}`,
     {

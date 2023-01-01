@@ -102,7 +102,7 @@ const CreateListing = () => {
   })
 
   const fetchAllCategories = async () => {
-    const result = await fetch("http://localhost:8080/api/v1/categories", {
+    const result = await fetch("/api/v1/categories", {
       method: "GET",
       headers: {
         Authorization: "Basic dGVzdDp0ZXN0",

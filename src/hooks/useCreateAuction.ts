@@ -42,7 +42,7 @@ export const createAuction = async (newAuction: {
     })
   )
 
-  const response = await fetch("http://localhost:8080/api/v1/auctions", {
+  const response = await fetch("/api/v1/auctions", {
     method: "POST",
     headers: {
       Authorization: "Basic dGVzdDp0ZXN0",

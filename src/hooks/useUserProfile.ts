@@ -15,7 +15,7 @@ interface Profile {
 }
 
 const fetchUserDetails = async (userId: number) => {
-  const response = await fetch(`http://localhost:8080/api/v1/user/${userId}`, {
+  const response = await fetch(`/api/v1/user/${userId}`, {
     method: "GET",
     headers: {
       Authorization: "Basic dGVzdDp0ZXN0",

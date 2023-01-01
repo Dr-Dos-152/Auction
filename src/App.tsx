@@ -2,13 +2,14 @@ import React, { createContext, ReactNode, useState } from "react"
 import "./App.scss"
 import "@cloudscape-design/global-styles/index.css"
 import TopNavigation from "@cloudscape-design/components/top-navigation"
-import { AppLayout } from "@cloudscape-design/components"
+import { AppLayout, ButtonDropdownProps } from "@cloudscape-design/components"
 import Footer from "./components/Footer"
 import "@cloudscape-design/global-styles/index.css"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import Alert from "@cloudscape-design/components/alert"
 import { noop } from "lodash"
+import Logout from "./components/Logout"
 
 const queryClient = new QueryClient()
 
@@ -31,6 +32,27 @@ export const AlertContext = createContext<AlertContextType>({
 
 function App() {
   const [alertNotification, setAlertNotification] = useState<null | Alert>(null)
+  const [showLogOutModal, setShowLogOutModal] = useState(false)
+  const navigate = useNavigate()
+
+  const handleUserProfileClick = (
+    e: CustomEvent<ButtonDropdownProps.ItemClickDetails>
+  ) => {
+    switch (e.detail.id) {
+      case "logout":
+        handleLogoutClick()
+        break
+      case "profile":
+        navigate("/profile")
+        break
+      default:
+        noop()
+    }
+  }
+
+  const handleLogoutClick = () => {
+    setShowLogOutModal(true)
+  }
 
   return (
     <>
@@ -88,15 +110,27 @@ function App() {
                 title: "Settings",
                 items: [
                   {
-                    id: "profile-settings",
-                    text: "View/Edit Profile",
-                    href: "/profile",
-                  },
-                  {
                     id: "theme-settings",
                     text: "Change theme",
                   },
                 ],
+              },
+              {
+                type: "menu-dropdown",
+                iconName: "user-profile",
+                ariaLabel: "Account",
+                title: "Account",
+                items: [
+                  {
+                    id: "logout",
+                    text: "Logout",
+                  },
+                  {
+                    id: "profile",
+                    text: "View/Edit Profile",
+                  },
+                ],
+                onItemClick: (e) => handleUserProfileClick(e),
               },
             ]}
           />
@@ -114,6 +148,10 @@ function App() {
               </Alert>
             </div>
           )}
+          <Logout
+            showLogOutModal={showLogOutModal}
+            setShowLogOutModal={setShowLogOutModal}
+          />
           <AppLayout
             footerSelector="#footer"
             navigationHide={true}
