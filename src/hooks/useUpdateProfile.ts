@@ -30,9 +30,6 @@ const fetchUpdateProfile = async (
 
   const response = await fetch("/api/v1/profile/", {
     method: "PATCH",
-    headers: {
-      Authorization: "Basic dGVzdDp0ZXN0",
-    },
     body: formData,
   })
 

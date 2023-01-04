@@ -10,6 +10,7 @@ import Home from "./components/home/Home"
 import CreateListing from "./components/CreateListings"
 import AuctionDetail from "./components/AuctionDetail"
 import Profile from "./components/Profile"
+import Login from "./components/Login"
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
       {
         path: "/create-listing",

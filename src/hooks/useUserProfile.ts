@@ -17,9 +17,6 @@ interface Profile {
 const fetchUserDetails = async (userId: number) => {
   const response = await fetch(`/api/v1/user/${userId}`, {
     method: "GET",
-    headers: {
-      Authorization: "Basic dGVzdDp0ZXN0",
-    },
   })
   if (!response.ok) {
     throw new Error("Could not fetch user details")

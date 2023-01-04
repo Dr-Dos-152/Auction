@@ -14,7 +14,6 @@ const fetchCreateBid = async (request: BidCreateRequest) => {
   const response = await fetch(`/api/v1/auction/${request.auctionId}/bid`, {
     method: "POST",
     headers: {
-      Authorization: "Basic c2h1YmRoaTp0ZXN0aW5n",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request),

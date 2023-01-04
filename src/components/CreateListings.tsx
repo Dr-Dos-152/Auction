@@ -104,9 +104,6 @@ const CreateListing = () => {
   const fetchAllCategories = async () => {
     const result = await fetch("/api/v1/categories", {
       method: "GET",
-      headers: {
-        Authorization: "Basic dGVzdDp0ZXN0",
-      },
     })
     const data = await result.json()
     if (!result.ok) {

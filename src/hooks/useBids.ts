@@ -4,9 +4,6 @@ import { useQuery } from "react-query"
 const fetchBids = async (auctionId: string) => {
   const response = await fetch(`/api/v1/auction/${auctionId}/bids`, {
     method: "GET",
-    headers: {
-      Authorization: "Basic dGVzdDp0ZXN0",
-    },
   })
   const data = await response.json()
   if (!response.ok) {

@@ -1,7 +1,7 @@
 import { useMutation } from "react-query"
 
 const fetchUseLogout = async () => {
-  const response = await fetch("/logout", {
+  const response = await fetch("/api/v1/logout", {
     method: "POST",
   })
   if (!response.ok) {

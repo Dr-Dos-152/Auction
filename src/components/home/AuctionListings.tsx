@@ -17,16 +17,11 @@ const fetchAuctions = async (
   createdAtOrder: CreatedAtOrder,
   currentPageIndex: number
 ) => {
-  const headers = {
-    Authorization: "Basic dGVzdDp0ZXN0",
-  }
   const result = await fetch(
-    `/api/v1/auctions?pageNumber=${
-      currentPageIndex - 1
+    `/api/v1/auctions?pageNumber=${currentPageIndex - 1
     }&createdAtOrder=${createdAtOrder}`,
     {
       method: "GET",
-      headers: headers,
     }
   )
   const data = await result.json()

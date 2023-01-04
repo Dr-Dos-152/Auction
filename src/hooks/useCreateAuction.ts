@@ -44,9 +44,6 @@ export const createAuction = async (newAuction: {
 
   const response = await fetch("/api/v1/auctions", {
     method: "POST",
-    headers: {
-      Authorization: "Basic dGVzdDp0ZXN0",
-    },
     body: formData,
   })
 
