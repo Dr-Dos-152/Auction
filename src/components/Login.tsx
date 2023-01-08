@@ -1,13 +1,27 @@
 import { Button, FormField, Input } from "@cloudscape-design/components";
 import Form from "@cloudscape-design/components/form";
 import { useState } from "react";
+import getCookie from "../utils/cookieUtils";
+
+
+const fetchCSRFCookie = async () => {
+  await fetch("/auth/login")
+}
 
 const fetchLogin = async (username: string, password: string) => {
-  const base64EncodedUsernamePassword = btoa(username + ":" + password);
-  const response = await fetch('/api/v1/login', {
+  await fetchCSRFCookie()
+  const csrfToken = getCookie('XSRF-TOKEN') as string
+  console.log('csrfToken', csrfToken);
+
+  const formData = new FormData();
+  formData.set("username", username);
+  formData.set("password", password);
+  // const base64EncodedUsernamePassword = btoa(username + ":" + password);
+  const response = await fetch('/auth/login', {
     method: "POST",
+    body: formData,
     headers: {
-      Authorization: `Basic ${base64EncodedUsernamePassword}`,
+      "X-XSRF-TOKEN": csrfToken
     }
   })
   if (!response.ok) {
