@@ -7,15 +7,15 @@ const getCookie = (name: string) => {
     return null
   }
 
-  const xsrfCookies = document.cookie
+  const cookies = document.cookie
     .split(";")
     .map((c) => c.trim())
     .filter((c) => c.startsWith(name + "="))
 
-  if (xsrfCookies.length === 0) {
+  if (cookies.length === 0) {
     return null
   }
-  return decodeURIComponent(xsrfCookies[0].split("=")[1])
+  return decodeURIComponent(cookies[0].split("=")[1])
 }
 
 export default getCookie

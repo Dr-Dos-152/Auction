@@ -16,12 +16,13 @@ const fetchUseLogout = async () => {
   }
 }
 
-const useLogout = () => {
+const useLogout = (successCallBack: Function) => {
   const logoutMutation = useMutation({
     mutationFn: () => fetchUseLogout(),
     onError: (e: Error) => {
       console.error(e)
     },
+    onSuccess: () => successCallBack(),
   })
   return logoutMutation
 }

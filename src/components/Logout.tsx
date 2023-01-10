@@ -1,11 +1,15 @@
 import { Button, Modal, SpaceBetween } from "@cloudscape-design/components"
+import React from "react"
 import useLogout from "../hooks/useLogout"
 
 const Logout = (props: {
   setShowLogOutModal: React.Dispatch<React.SetStateAction<boolean>>
   showLogOutModal: boolean
+  setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const logoutMutation = useLogout()
+  const logoutMutation = useLogout(() => {
+    props.setUserIsLoggedIn(false)
+  })
 
   const handleLogoutClick = () => {
     logoutMutation.mutate()

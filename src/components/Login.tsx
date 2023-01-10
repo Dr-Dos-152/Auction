@@ -1,18 +1,19 @@
-import { Button, FormField, Input } from "@cloudscape-design/components";
+import { Button, FormField, Input, SpaceBetween } from "@cloudscape-design/components";
 import Form from "@cloudscape-design/components/form";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthenticatedContext } from "../App";
 import getCookie, { fetchCSRFCookie } from "../utils/cookieUtils";
 
 
 const fetchLogin = async (username: string, password: string) => {
   await fetchCSRFCookie()
   const csrfToken = getCookie('XSRF-TOKEN') as string
-  console.log('csrfToken', csrfToken);
 
   const formData = new FormData();
   formData.set("username", username);
   formData.set("password", password);
-  // const base64EncodedUsernamePassword = btoa(username + ":" + password);
+
   const response = await fetch('/auth/login', {
     method: "POST",
     body: formData,
@@ -20,6 +21,7 @@ const fetchLogin = async (username: string, password: string) => {
       "X-XSRF-TOKEN": csrfToken
     }
   })
+
   if (!response.ok) {
     throw Error("Could not login")
   }
@@ -27,26 +29,45 @@ const fetchLogin = async (username: string, password: string) => {
 
 const Login = () => {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { userIsLoggedIn, setUserIsLoggedIn } = useContext(AuthenticatedContext);
 
   const handleClickSubmit = async () => {
-    console.log(username, password);
     await fetchLogin(username, password);
+    navigate('/');
+    setUserIsLoggedIn(true)
+  }
+
+  if (userIsLoggedIn) {
+    return <>
+      Already logged in
+    </>
   }
 
   return (
-    <Form>
 
-      <FormField label={"Username"}>
-        <Input value={username} onChange={(e) => setUsername(e.detail.value)} />
-      </FormField>
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100%"
+    }}>
 
-      <FormField label={"Password"}>
-        <Input value={password} onChange={(e) => setPassword(e.detail.value)} />
-      </FormField>
+      <Form header={<h1>Login</h1>}>
+        <SpaceBetween size={"s"} direction="vertical">
+          <FormField label={"Username"}>
+            <Input value={username} onChange={(e) => setUsername(e.detail.value)} />
+          </FormField>
 
-      <Button onClick={handleClickSubmit}>Submit</Button>
-    </Form>
+          <FormField label={"Password"}>
+            <Input value={password} type="password" onChange={(e) => setPassword(e.detail.value)} />
+          </FormField>
+
+          <Button onClick={handleClickSubmit}>Submit</Button>
+        </SpaceBetween>
+      </Form>
+    </div>
   )
 }
 
