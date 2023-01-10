@@ -1,12 +1,8 @@
 import { Button, FormField, Input } from "@cloudscape-design/components";
 import Form from "@cloudscape-design/components/form";
 import { useState } from "react";
-import getCookie from "../utils/cookieUtils";
+import getCookie, { fetchCSRFCookie } from "../utils/cookieUtils";
 
-
-const fetchCSRFCookie = async () => {
-  await fetch("/auth/login")
-}
 
 const fetchLogin = async (username: string, password: string) => {
   await fetchCSRFCookie()

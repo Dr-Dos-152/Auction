@@ -1,3 +1,7 @@
+export const fetchCSRFCookie = async () => {
+  await fetch("/auth/csrf")
+}
+
 const getCookie = (name: string) => {
   if (!document.cookie) {
     return null
