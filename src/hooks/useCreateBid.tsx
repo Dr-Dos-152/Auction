@@ -3,6 +3,7 @@ import { useMutation } from "react-query"
 import { AlertContext } from "../App"
 import { Spinner } from "@cloudscape-design/components"
 import { StatusCodes } from "http-status-codes"
+import fetchWrapper from "../utils/fetchWrapper"
 
 interface BidCreateRequest {
   auctionId: string
@@ -11,7 +12,7 @@ interface BidCreateRequest {
 }
 
 const fetchCreateBid = async (request: BidCreateRequest) => {
-  const response = await fetch(`/api/v1/auction/${request.auctionId}/bid`, {
+  const response = await fetchWrapper(`/api/v1/auction/${request.auctionId}/bid`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

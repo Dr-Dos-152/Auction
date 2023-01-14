@@ -1,15 +1,9 @@
 import { useMutation } from "react-query"
-import getCookie from "../utils/cookieUtils"
+import fetchWrapper from "../utils/fetchWrapper"
 
 const fetchUseLogout = async () => {
-  const csrfToken = getCookie("XSRF-TOKEN") as string
-  console.log("csrfToken", csrfToken)
-
-  const response = await fetch("/auth/logout", {
+  const response = await fetchWrapper("/auth/logout", {
     method: "POST",
-    headers: {
-      "X-XSRF-TOKEN": csrfToken,
-    },
   })
   if (!response.ok) {
     throw Error("Could not logout")

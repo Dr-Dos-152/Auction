@@ -1,5 +1,6 @@
 import { Auction } from "../schemas/auctionSchema"
 import { Item } from "../schemas/itemSchema"
+import fetchWrapper from "../utils/fetchWrapper"
 
 const constructAuctionBody = (
   auction: Auction,
@@ -42,7 +43,7 @@ export const createAuction = async (newAuction: {
     })
   )
 
-  const response = await fetch("/api/v1/auctions", {
+  const response = await fetchWrapper("/api/v1/auctions", {
     method: "POST",
     body: formData,
   })
