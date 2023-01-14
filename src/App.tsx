@@ -231,7 +231,10 @@ function App() {
                 footerSelector="#footer"
                 navigationHide={true}
                 toolsHide={true}
-                content={(location.pathname === '/login' || userIsLoggedIn) ? <Outlet /> : <p>Click <Link to={"/login"}>here</Link> to login and access the application</p>}
+                content={(location.pathname === '/login' || location.pathname === '/register' || userIsLoggedIn) ?
+                  <Outlet /> :
+                  <p>Click <Link to={"/login"}>here</Link> to login and access the application. If you do not have an account,
+                    click <Link to={"/register"}>register</Link>.</p>}
               />
             </QueryClientProvider>
           </FlashbarContext.Provider>

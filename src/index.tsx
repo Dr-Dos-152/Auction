@@ -11,6 +11,7 @@ import CreateListing from "./components/CreateListings"
 import AuctionDetail from "./components/AuctionDetail"
 import Profile from "./components/Profile"
 import Login from "./components/Login"
+import Register from "./components/Register"
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
       {
         path: "/create-listing",
