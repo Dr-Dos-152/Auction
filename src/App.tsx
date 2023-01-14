@@ -157,15 +157,31 @@ function App() {
     if (userIsLoggedIn) {
       utilities.push(menuUtility)
     } else {
-      utilities.push({
-        type: "button",
-        iconName: "user-profile",
-        ariaLabel: "Login",
-        title: "Login",
-        onClick: () => {
-          navigate("/login")
-        }
-      })
+      utilities.push(
+        {
+          type: "menu-dropdown",
+          iconName: "user-profile",
+          title: "Account",
+          items: [
+            {
+              id: "login",
+              text: "Login",
+              href: "/login",
+            },
+            {
+              id: "register",
+              text: "Register",
+              href: "/register"
+            },
+          ],
+          onItemClick: (e) => {
+            e.preventDefault()
+            if (e.detail.href) {
+              navigate(e.detail.href)
+            }
+          }
+        },
+      )
     }
     return utilities;
   }
