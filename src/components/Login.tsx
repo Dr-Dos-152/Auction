@@ -3,23 +3,17 @@ import Form from "@cloudscape-design/components/form";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthenticatedContext } from "../App";
-import getCookie, { fetchCSRFCookie } from "../utils/cookieUtils";
+import fetchWrapper from "../utils/fetchWrapper";
 
 
 const fetchLogin = async (username: string, password: string) => {
-  await fetchCSRFCookie()
-  const csrfToken = getCookie('XSRF-TOKEN') as string
-
   const formData = new FormData();
   formData.set("username", username);
   formData.set("password", password);
 
-  const response = await fetch('/auth/login', {
+  const response = await fetchWrapper('/auth/login', {
     method: "POST",
     body: formData,
-    headers: {
-      "X-XSRF-TOKEN": csrfToken
-    }
   })
 
   if (!response.ok) {

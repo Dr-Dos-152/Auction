@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { AlertContext } from "../App"
 import { useMutation } from "react-query"
+import fetchWrapper from "../utils/fetchWrapper"
 
 interface ProfileUpdateRequest {
   firstName?: string
@@ -28,7 +29,7 @@ const fetchUpdateProfile = async (
     })
   )
 
-  const response = await fetch("/api/v1/profile/", {
+  const response = await fetchWrapper("/api/v1/profile/", {
     method: "PATCH",
     body: formData,
   })
