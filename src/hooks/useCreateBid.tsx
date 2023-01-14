@@ -30,37 +30,19 @@ const fetchCreateBid = async (request: BidCreateRequest) => {
   }
 }
 
-const useCreateBid = (args: { handleSuccess: Function }) => {
-  const { setAlertNotification } = useContext(AlertContext)
+const useCreateBid = (args: { handleSuccess: Function, handleMutate: Function, handleError: Function }) => {
   const createBidMutation = useMutation({
     mutationFn: (bidCreateRequest: BidCreateRequest) =>
       fetchCreateBid(bidCreateRequest),
     onError: (e: Error) => {
       console.error(`An error occured: ${e}`)
-      setAlertNotification({
-        isVisible: true,
-        type: "error",
-        header: "Error placing a bid",
-        content: e.message,
-      })
+      args.handleError()
     },
-    onSuccess: (e) => {
-      setAlertNotification({
-        isVisible: true,
-        type: "success",
-        header: "Successfully placed a bid",
-        content: "",
-      })
+    onSuccess: () => {
       args.handleSuccess()
     },
     onMutate: () => {
-      setAlertNotification({
-        isVisible: true,
-        type: "info",
-        header: "Attempting to place a bid",
-        content: <Spinner />,
-      })
-      args.handleSuccess()
+      args.handleMutate()
     },
   })
   return createBidMutation

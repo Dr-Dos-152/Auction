@@ -6,7 +6,7 @@ import { AppLayout, ButtonDropdownProps, Flashbar, FlashbarProps } from "@clouds
 import Footer from "./components/Footer"
 import "@cloudscape-design/global-styles/index.css"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { Outlet, useNavigate } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import Alert from "@cloudscape-design/components/alert"
 import { noop } from "lodash"
 import Logout from "./components/Logout"
@@ -58,6 +58,13 @@ function App() {
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation();
+
+
+  // Flash bar should be reset on navigation to different page
+  useEffect(() => {
+    setFlashBarNotification([]);
+  }, [location])
 
   useEffect(() => {
     async function checkIfUserIsLoggedIn() {

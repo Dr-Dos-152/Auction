@@ -12,27 +12,31 @@ const Logout = (props: {
     props.setUserIsLoggedIn(false)
 
   })
-  const { setFlashBarNotification } = useContext(FlashbarContext);
+  const { flashBarNotification, setFlashBarNotification } = useContext(FlashbarContext);
 
   const handleLogoutClick = () => {
     logoutMutation.mutate()
     props.setShowLogOutModal(false)
-    setFlashBarNotification([{
-      header: "Logged out successfully",
-      type: "success",
-      content:
-        "You have been logged out, bye!",
-      dismissible: true,
-      dismissLabel: "Dismiss message",
-      onDismiss: () => {
-        setFlashBarNotification(flashBarNotifications => {
-          return flashBarNotifications.filter((flashBarNotification) => {
-            return flashBarNotification.id !== "logoutNotification"
+    const newFlashBarNotification = [...flashBarNotification]
+    newFlashBarNotification.push(
+      {
+        header: "Logged out successfully",
+        type: "success",
+        content:
+          "You have been logged out, bye!",
+        dismissible: true,
+        dismissLabel: "Dismiss message",
+        onDismiss: () => {
+          setFlashBarNotification(flashBarNotifications => {
+            return flashBarNotifications.filter((flashBarNotification) => {
+              return flashBarNotification.id !== "logoutNotification"
+            })
           })
-        })
-      },
-      id: "logoutNotification"
-    }])
+        },
+        id: "logoutNotification"
+      }
+    )
+    setFlashBarNotification(newFlashBarNotification);
   }
 
   return (
