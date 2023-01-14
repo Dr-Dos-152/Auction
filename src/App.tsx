@@ -6,7 +6,7 @@ import { AppLayout, ButtonDropdownProps, Flashbar, FlashbarProps } from "@clouds
 import Footer from "./components/Footer"
 import "@cloudscape-design/global-styles/index.css"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { Outlet, useLocation, useNavigate } from "react-router-dom"
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import Alert from "@cloudscape-design/components/alert"
 import { noop } from "lodash"
 import Logout from "./components/Logout"
@@ -74,6 +74,7 @@ function App() {
 
     checkIfUserIsLoggedIn();
   }, [])
+
 
   const handleUserProfileClick = (
     e: CustomEvent<ButtonDropdownProps.ItemClickDetails>
@@ -230,7 +231,7 @@ function App() {
                 footerSelector="#footer"
                 navigationHide={true}
                 toolsHide={true}
-                content={<Outlet />}
+                content={(location.pathname === '/login' || userIsLoggedIn) ? <Outlet /> : <p>Click <Link to={"/login"}>here</Link> to login and access the application</p>}
               />
             </QueryClientProvider>
           </FlashbarContext.Provider>
