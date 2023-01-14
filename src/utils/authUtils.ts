@@ -5,7 +5,6 @@ const fetchVerifyCredentials = async () => {
     const response = await fetch("/auth/verifyCredentials", {
       redirect: "error",
     })
-    console.log(response.status)
     if (response.status === StatusCodes.OK) {
       return true
     }

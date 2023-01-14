@@ -1,5 +1,6 @@
 import { Button, Modal, SpaceBetween } from "@cloudscape-design/components"
-import React from "react"
+import React, { useContext } from "react"
+import { FlashbarContext } from "../App"
 import useLogout from "../hooks/useLogout"
 
 const Logout = (props: {
@@ -9,11 +10,29 @@ const Logout = (props: {
 }) => {
   const logoutMutation = useLogout(() => {
     props.setUserIsLoggedIn(false)
+
   })
+  const { setFlashBarNotification } = useContext(FlashbarContext);
 
   const handleLogoutClick = () => {
     logoutMutation.mutate()
     props.setShowLogOutModal(false)
+    setFlashBarNotification([{
+      header: "Logged out successfully",
+      type: "success",
+      content:
+        "You have been logged out, bye!",
+      dismissible: true,
+      dismissLabel: "Dismiss message",
+      onDismiss: () => {
+        setFlashBarNotification(flashBarNotifications => {
+          return flashBarNotifications.filter((flashBarNotification) => {
+            return flashBarNotification.id !== "logoutNotification"
+          })
+        })
+      },
+      id: "logoutNotification"
+    }])
   }
 
   return (
@@ -25,7 +44,7 @@ const Logout = (props: {
       <p>Are you sure you want to logout?</p>
 
       <SpaceBetween direction="horizontal" size="xs">
-        <Button variant="link">Cancel</Button>
+        <Button variant="link" onClick={() => props.setShowLogOutModal(false)}>Cancel</Button>
         <Button variant="primary" onClick={handleLogoutClick}>
           Logout
         </Button>

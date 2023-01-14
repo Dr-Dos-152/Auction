@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useEffect, useState } from "react"
 import "./App.scss"
 import "@cloudscape-design/global-styles/index.css"
 import TopNavigation, { TopNavigationProps } from "@cloudscape-design/components/top-navigation"
-import { AppLayout, ButtonDropdownProps } from "@cloudscape-design/components"
+import { AppLayout, ButtonDropdownProps, Flashbar, FlashbarProps } from "@cloudscape-design/components"
 import Footer from "./components/Footer"
 import "@cloudscape-design/global-styles/index.css"
 import { QueryClient, QueryClientProvider } from "react-query"
@@ -35,13 +35,26 @@ interface AuthenticatedContextType {
   userIsLoggedIn: boolean
   setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
 }
+
 export const AuthenticatedContext = createContext<AuthenticatedContextType>({
   userIsLoggedIn: false,
   setUserIsLoggedIn: noop
 })
 
+interface FlashbarContextType {
+  flashBarNotification: Array<FlashbarProps.MessageDefinition>,
+  setFlashBarNotification: React.Dispatch<React.SetStateAction<Array<FlashbarProps.MessageDefinition>>>
+}
+
+export const FlashbarContext = createContext<FlashbarContextType>({
+  flashBarNotification: [],
+  setFlashBarNotification: noop,
+})
+
+
 function App() {
   const [alertNotification, setAlertNotification] = useState<null | Alert>(null)
+  const [flashBarNotification, setFlashBarNotification] = useState<Array<FlashbarProps.MessageDefinition>>([]);
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false)
   const navigate = useNavigate()
@@ -155,56 +168,65 @@ function App() {
         <AlertContext.Provider
           value={{ alertNotification, setAlertNotification }}
         >
-          <QueryClientProvider client={queryClient}>
-            <TopNavigation
-              identity={{
-                onFollow: (e) => {
-                  e.preventDefault();
-                  navigate("/");
-                },
-                href: "/",
-                title: "YetAnotherAuctionApp",
-                logo: {
-                  src: "/images/logo.png",
-                  alt: "Auction App",
-                },
-              }}
-              i18nStrings={{
-                searchIconAriaLabel: "Search",
-                searchDismissIconAriaLabel: "Close search",
-                overflowMenuTriggerText: "More",
-                overflowMenuTitleText: "All",
-                overflowMenuBackIconAriaLabel: "Back",
-                overflowMenuDismissIconAriaLabel: "Close menu",
-              }}
-              utilities={getNavigationUtilities()}
-            />
-            {alertNotification && (
-              <div style={{ margin: "1rem 0.5rem 0 0.5rem" }}>
-                <Alert
-                  onDismiss={() => setAlertNotification(null)}
-                  visible={alertNotification?.isVisible}
-                  dismissAriaLabel="Close alert"
-                  header={alertNotification.header}
-                  type={alertNotification.type}
-                  dismissible
-                >
-                  {alertNotification.content}
-                </Alert>
-              </div>
-            )}
-            <Logout
-              showLogOutModal={showLogOutModal}
-              setShowLogOutModal={setShowLogOutModal}
-              setUserIsLoggedIn={setUserIsLoggedIn}
-            />
-            <AppLayout
-              footerSelector="#footer"
-              navigationHide={true}
-              toolsHide={true}
-              content={<Outlet />}
-            />
-          </QueryClientProvider>
+          <FlashbarContext.Provider value={{ flashBarNotification, setFlashBarNotification }}>
+            <QueryClientProvider client={queryClient}>
+              <TopNavigation
+                identity={{
+                  onFollow: (e) => {
+                    e.preventDefault();
+                    navigate("/");
+                  },
+                  href: "/",
+                  title: "YetAnotherAuctionApp",
+                  logo: {
+                    src: "/images/logo.png",
+                    alt: "Auction App",
+                  },
+                }}
+                i18nStrings={{
+                  searchIconAriaLabel: "Search",
+                  searchDismissIconAriaLabel: "Close search",
+                  overflowMenuTriggerText: "More",
+                  overflowMenuTitleText: "All",
+                  overflowMenuBackIconAriaLabel: "Back",
+                  overflowMenuDismissIconAriaLabel: "Close menu",
+                }}
+                utilities={getNavigationUtilities()}
+              />
+              {alertNotification && (
+                <div style={{ margin: "1rem 0.5rem 0 0.5rem" }}>
+                  <Alert
+                    onDismiss={() => setAlertNotification(null)}
+                    visible={alertNotification?.isVisible}
+                    dismissAriaLabel="Close alert"
+                    header={alertNotification.header}
+                    type={alertNotification.type}
+                    dismissible
+                  >
+                    {alertNotification.content}
+                  </Alert>
+                </div>
+              )}
+              {flashBarNotification.length !== 0 && (
+                <div style={{ margin: "1rem 0.5rem 0 0.5rem", position: "fixed", bottom: "2.5rem", right: "1rem", zIndex: 1000 }}>
+                  <Flashbar
+                    items={flashBarNotification}
+                  />
+                </div>
+              )}
+              <Logout
+                showLogOutModal={showLogOutModal}
+                setShowLogOutModal={setShowLogOutModal}
+                setUserIsLoggedIn={setUserIsLoggedIn}
+              />
+              <AppLayout
+                footerSelector="#footer"
+                navigationHide={true}
+                toolsHide={true}
+                content={<Outlet />}
+              />
+            </QueryClientProvider>
+          </FlashbarContext.Provider>
         </AlertContext.Provider>
       </AuthenticatedContext.Provider>
       <Footer />
