@@ -19,7 +19,7 @@ client.onConnect = function (frame) {
   // Do something, all subscribes must be done is this callback
   // This is needed because this will be executed after a (re)connect
 
-  client.subscribe("/topic/greetings", (message) => {
+  client.subscribe("/topic/shubdhi:test", (message) => {
     console.log('Received message', message);
   })
 };
@@ -41,7 +41,7 @@ const WebSocketTest = () => {
 
   const handleClick = () => {
     console.log("Publishing...")
-    client.publish({ destination: '/app/hello', body: 'Hello world' })
+    client.publish({ destination: '/app/shubdhi:test', body: 'Hello world' })
   }
 
   return (
