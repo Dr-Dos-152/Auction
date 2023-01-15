@@ -12,6 +12,8 @@ import AuctionDetail from "./components/AuctionDetail"
 import Profile from "./components/Profile"
 import Login from "./components/Login"
 import Register from "./components/Register"
+import WebSocketTest from "./components/WebSocketTest"
+import Chat from "./components/Chat"
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <Profile />,
       },
+      {
+        path: "/test",
+        element: <WebSocketTest />,
+      },
+      {
+        path: "/chat",
+        element: <Chat />,
+      }
     ],
   },
 ])
