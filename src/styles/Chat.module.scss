@@ -8,11 +8,41 @@
 
 .message {
   display: flex;
+  flex-direction: column;
   gap: 4px;
-  .messageUserName {
-    font-weight: bold;
-  }
-  .messageContent {
-    word-break: break-all;
-  }
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.messageHeader {
+  display: flex;
+  gap: 4px;
+}
+
+.messageHighlight {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 8px;
+  background-color: aliceblue;
+  padding: 0.5rem;
+}
+
+.messageUserName {
+  font-weight: bold;
+}
+.messageUserNameHighlight {
+  color: firebrick;
+  font-weight: bold;
+}
+
+.messageContent {
+  word-break: break-all;
+  display: flex;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 8px 0 8px 0;
 }
