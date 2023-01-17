@@ -11,6 +11,7 @@ import Alert from "@cloudscape-design/components/alert"
 import { noop } from "lodash"
 import Logout from "./components/Logout"
 import fetchVerifyCredentials from "./utils/authUtils"
+import { string } from "zod"
 
 const queryClient = new QueryClient()
 
@@ -34,11 +35,15 @@ export const AlertContext = createContext<AlertContextType>({
 interface AuthenticatedContextType {
   userIsLoggedIn: boolean
   setUserIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+  userName: string
+  setUserName: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const AuthenticatedContext = createContext<AuthenticatedContextType>({
   userIsLoggedIn: false,
-  setUserIsLoggedIn: noop
+  setUserIsLoggedIn: noop,
+  userName: "",
+  setUserName: noop,
 })
 
 interface FlashbarContextType {
@@ -57,6 +62,7 @@ function App() {
   const [flashBarNotification, setFlashBarNotification] = useState<Array<FlashbarProps.MessageDefinition>>([]);
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false)
+  const [userName, setUserName] = useState("")
   const navigate = useNavigate()
   const location = useLocation();
 
@@ -68,8 +74,9 @@ function App() {
 
   useEffect(() => {
     async function checkIfUserIsLoggedIn() {
-      const result = await fetchVerifyCredentials();
-      setUserIsLoggedIn(result);
+      const { isAuthenticated, userName } = await fetchVerifyCredentials();
+      setUserIsLoggedIn(isAuthenticated);
+      setUserName(userName)
     }
 
     checkIfUserIsLoggedIn();
@@ -188,7 +195,7 @@ function App() {
 
   return (
     <>
-      <AuthenticatedContext.Provider value={{ userIsLoggedIn, setUserIsLoggedIn }}>
+      <AuthenticatedContext.Provider value={{ userIsLoggedIn, setUserIsLoggedIn, userName, setUserName }}>
         <AlertContext.Provider
           value={{ alertNotification, setAlertNotification }}
         >

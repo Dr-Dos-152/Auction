@@ -5,13 +5,21 @@ const fetchVerifyCredentials = async () => {
     const response = await fetch("/auth/verifyCredentials", {
       redirect: "error",
     })
+
     if (response.status === StatusCodes.OK) {
-      return true
+      const data = await response.json()
+      return {
+        isAuthenticated: true,
+        userName: data.userName,
+      }
     }
   } catch (e) {
     console.warn(e)
   }
-  return false
+  return {
+    isAuthenticated: false,
+    userName: "",
+  }
 }
 
 export default fetchVerifyCredentials
