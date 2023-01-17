@@ -5,7 +5,7 @@ import ChatUser from "./ChatUser"
 import * as StompJs from '@stomp/stompjs';
 import { AuthenticatedContext } from "../App";
 import moment from "moment";
-
+import styles from "../styles/ChatPage.module.scss";
 
 
 const ChatPage = () => {
@@ -89,23 +89,26 @@ const ChatPage = () => {
     }}>
       <div style={{ width: "100%" }}>
         <Container header={<h2>Chat</h2>}>
-          <p>Chatting with: {selectedUser}</p>
           <Grid gridDefinition={[
             { colspan: { default: 12, s: 3 } },
             { colspan: { default: 12, s: 9 } },
           ]}>
             <div>
-              <div onClick={() => setSelectedUser("shubdhi")}>
+              <div className={styles.chatUserContainer} onClick={() => setSelectedUser("shubdhi")}>
                 <ChatUser name="shubdhi" />
               </div>
-              <div onClick={() => setSelectedUser("bob")}>
+              <div className={styles.chatUserContainer} onClick={() => setSelectedUser("bob")}>
                 <ChatUser name="bob" />
               </div>
-              <div onClick={() => setSelectedUser("test")}>
+              <div className={styles.chatUserContainer} onClick={() => setSelectedUser("test")}>
                 <ChatUser name="test" />
               </div>
             </div>
-            {selectedUser && <Chat userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
+
+            <div>
+              <p>Chatting with: <b>{selectedUser}</b></p>
+              {selectedUser && <Chat userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
+            </div>
           </Grid>
         </Container>
       </div>
