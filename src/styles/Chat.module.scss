@@ -46,3 +46,16 @@
   flex-direction: row-reverse;
   margin: 8px 0 8px 0;
 }
+
+.loadMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.historyLoadMessage {
+  cursor: pointer;
+  background: lightgray;
+  border: 1px solid;
+}

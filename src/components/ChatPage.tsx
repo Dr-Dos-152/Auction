@@ -71,7 +71,7 @@ const ChatPage = () => {
       messages.push({
         userName: userName,
         message: message.body,
-        dateTime: moment.utc().format(),
+        sentAt: moment.utc().format(),
       })
       return {
         ...oldChatMessages,
@@ -107,7 +107,7 @@ const ChatPage = () => {
 
             <div>
               <p>Chatting with: <b>{selectedUser}</b></p>
-              {selectedUser && <Chat userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
+              {selectedUser && <Chat key={selectedUser} userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
             </div>
           </Grid>
         </Container>

@@ -17,5 +17,5 @@ interface Profile {
 interface ChatMessageResponse {
   userName: string
   message: string
-  dateTime: string
+  sentAt: string
 }
