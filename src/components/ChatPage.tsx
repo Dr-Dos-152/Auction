@@ -4,18 +4,14 @@ import Chat from "./Chat"
 import ChatUser from "./ChatUser"
 import * as StompJs from '@stomp/stompjs';
 import { AuthenticatedContext } from "../App";
+import moment from "moment";
 
-
-interface MessageBody {
-  userName: string
-  message: string
-}
 
 
 const ChatPage = () => {
   const [client, setClient] = useState<StompJs.Client | null>(null);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [chatMessages, setChatMessages] = useState<Record<string, Array<String>>>({});
+  const [chatMessages, setChatMessages] = useState<Record<string, Array<ChatMessageResponse>>>({});
   const { userName } = useContext(AuthenticatedContext);
 
   useEffect(() => {
@@ -36,11 +32,11 @@ const ChatPage = () => {
       console.log("Connected")
 
       client.subscribe(`/topic/${userName}`, (message) => {
-        const messageBody: MessageBody = JSON.parse(message.body);
+        const messageBody: ChatMessageResponse = JSON.parse(message.body);
         console.log('Received message', messageBody);
         setChatMessages((oldChatMessages) => {
           const messages = oldChatMessages[messageBody.userName] ? [...oldChatMessages[messageBody.userName]] : []
-          messages.push(messageBody.message)
+          messages.push(messageBody)
           return {
             ...oldChatMessages,
             [messageBody.userName]: messages
@@ -68,31 +64,52 @@ const ChatPage = () => {
     }
   }, [])
 
-  const publishMessage = (message: { destination: string, body: string }) => {
-    client!.publish(message);
+  const publishMessage = (message: { destinationUserName: string, body: string }) => {
+    client!.publish({ destination: `/app/chat/${message.destinationUserName}`, body: message.body });
+    setChatMessages((oldChatMessages) => {
+      const messages = oldChatMessages[message.destinationUserName] ? [...oldChatMessages[message.destinationUserName]] : []
+      messages.push({
+        userName: userName,
+        message: message.body,
+        dateTime: moment.utc().format(),
+      })
+      return {
+        ...oldChatMessages,
+        [message.destinationUserName]: messages
+      }
+    });
   }
 
   return (
-    <Container header={<h2>Chat</h2>}>
-      <p>Chatting with: {selectedUser}</p>
-      <Grid gridDefinition={[
-        { colspan: { default: 12, s: 3 } },
-        { colspan: { default: 12, s: 9 } },
-      ]}>
-        <div>
-          <div onClick={() => setSelectedUser("shubdhi")}>
-            <ChatUser name="shubdhi" />
-          </div>
-          <div onClick={() => setSelectedUser("bob")}>
-            <ChatUser name="bob" />
-          </div>
-          <div onClick={() => setSelectedUser("test")}>
-            <ChatUser name="test" />
-          </div>
-        </div>
-        {selectedUser && <Chat userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
-      </Grid>
-    </Container>
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: 'center',
+      height: "100%"
+    }}>
+      <div style={{ width: "100%" }}>
+        <Container header={<h2>Chat</h2>}>
+          <p>Chatting with: {selectedUser}</p>
+          <Grid gridDefinition={[
+            { colspan: { default: 12, s: 3 } },
+            { colspan: { default: 12, s: 9 } },
+          ]}>
+            <div>
+              <div onClick={() => setSelectedUser("shubdhi")}>
+                <ChatUser name="shubdhi" />
+              </div>
+              <div onClick={() => setSelectedUser("bob")}>
+                <ChatUser name="bob" />
+              </div>
+              <div onClick={() => setSelectedUser("test")}>
+                <ChatUser name="test" />
+              </div>
+            </div>
+            {selectedUser && <Chat userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
+          </Grid>
+        </Container>
+      </div>
+    </div>
   )
 
 }

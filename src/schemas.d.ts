@@ -13,3 +13,9 @@ interface Profile {
   description: string | null
   profilePictureURL: string | null
 }
+
+interface ChatMessageResponse {
+  userName: string
+  message: string
+  dateTime: string
+}

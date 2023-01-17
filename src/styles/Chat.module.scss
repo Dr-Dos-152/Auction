@@ -1,0 +1,18 @@
+.chatbox {
+  height: 30em;
+  padding: 1rem;
+  border: 1px solid;
+  overflow-y: scroll;
+  word-wrap: break-word;
+}
+
+.message {
+  display: flex;
+  gap: 4px;
+  .messageUserName {
+    font-weight: bold;
+  }
+  .messageContent {
+    word-break: break-all;
+  }
+}
