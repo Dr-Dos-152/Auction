@@ -1,18 +1,20 @@
+import Button from '@cloudscape-design/components/button';
 import Input from '@cloudscape-design/components/input';
 import * as StompJs from '@stomp/stompjs';
 import { useEffect, useState } from 'react';
 
 
-const Chat = () => {
+const Chat = (props: { userName: String }) => {
   const [client, setClient] = useState<StompJs.Client | null>(null)
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<Array<String>>([])
 
   const handleClick = () => {
-    client!.publish({ destination: '/app/chat/shubdhi:test', body: message })
+    client!.publish({ destination: `/app/chat/${props.userName}:test`, body: message })
   }
 
   useEffect(() => {
+    setChatMessages([]);
     const client = new StompJs.Client({
       brokerURL: 'ws://localhost:8081/websockets/stomp',
       connectHeaders: {
@@ -28,7 +30,7 @@ const Chat = () => {
     client.onConnect = function () {
       console.log("Connected")
 
-      client.subscribe("/topic/shubdhi:test", (message) => {
+      client.subscribe(`/topic/${props.userName}:test`, (message) => {
         console.log('Received message', message);
         setChatMessages((oldChatMessages) => {
           const chatMessages = [...oldChatMessages]
@@ -55,7 +57,8 @@ const Chat = () => {
     return () => {
       client.deactivate()
     }
-  }, [])
+  }, [props.userName])
+
 
   const messages = chatMessages.map((message) => <p>{message}</p>)
 
@@ -63,7 +66,7 @@ const Chat = () => {
     <div>
       Chat
       <Input value={message} onChange={(e) => setMessage(e.detail.value)} />
-      <button onClick={() => handleClick()}>Publish</button>
+      <Button onClick={() => handleClick()}>Publish</Button>
       {messages}
     </div>
   )
