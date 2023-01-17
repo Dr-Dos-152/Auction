@@ -16,6 +16,7 @@ const Chat = (props: {
   const bottomDiv = useRef<null | HTMLDivElement>(null)
   const [chatHistory, setChatHistory] = useState<Array<ChatMessageResponse>>([]);
   const [noPreviousHistory, setNoPreviousHistory] = useState(false);
+  const [isErrorFetchingHistory, setIsErrorFetchingHistory] = useState(false);
 
 
   useEffect(() => {
@@ -32,15 +33,12 @@ const Chat = (props: {
           })
         }
       }
-    )
+    ).catch((e) => {
+      console.error(e);
+      setIsErrorFetchingHistory(true);
+    })
   }, [chatHistoryPageNumber])
 
-
-  console.log(chatHistory)
-
-  useEffect(() => {
-    setMessage("")
-  }, [props.userName])
 
   /**
    * TODO: Not ideal, but will work for now
@@ -72,25 +70,34 @@ const Chat = (props: {
     setChatHistoryPageNumber(chatHistoryPageNumber + 1)
   }
 
-  const messages = props.messages ? props.messages.map(message => <Message {...message} highlight={message.userName !== props.userName} />) : "No new messages";
-  const historicalMessages = chatHistory.length !== 0 ? chatHistory.map(message => <Message {...message} highlight={message.userName !== props.userName} />) : "";
+  const getPreviousHistory = () => {
+    if (isErrorFetchingHistory) {
+      return "Previous chat history can't be fetched"
+    }
+    if (noPreviousHistory) {
+      return <p className={styles.loadMessage}>End of previous chat history</p>
+    }
+    if (chatHistory.length === 0) {
+      return "Loading previous chat history..."
+    }
+    return (
+      <p className={`${styles.historyLoadMessage} ${styles.loadMessage}`} onClick={() => handleClickLoadPreviousMessages()}>Load previous messages</p>
+    )
+  }
+
+  const messages = props.messages ? props.messages.map(message => <Message key={`${message.userName}:${message.sentAt}`} {...message} highlight={message.userName !== props.userName} />) : "No new messages";
+  const historicalMessages = chatHistory.length !== 0 ? chatHistory.map(message => <Message key={`${message.userName}:${message.sentAt}`} {...message} highlight={message.userName !== props.userName} />) : "";
 
   return (
     <div>
       <SpaceBetween size={'s'} direction="vertical">
 
         <div className={styles.chatbox}>
-          {
-            chatHistory.length === 0 ? "Loading previous chat history..." :
-              <div>
-                {noPreviousHistory ?
-                  <p className={styles.loadMessage}>End of previous chat history</p> :
-                  <p className={`${styles.historyLoadMessage} ${styles.loadMessage}`} onClick={() => handleClickLoadPreviousMessages()}>Load previous messages</p>
-                }
-                {historicalMessages}
-                <hr />
-              </div>
-          }
+          <div>
+            {getPreviousHistory()}
+            {historicalMessages}
+          </div>
+          <hr />
           {messages}
           <div
             ref={bottomDiv}>
@@ -114,7 +121,6 @@ const Chat = (props: {
 
 
 const Message = (props: ChatMessageResponse & { highlight: boolean }) => {
-
 
   return (
     <div className={props.highlight ? styles.messageContainer : ""}>
