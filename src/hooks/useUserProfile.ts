@@ -1,11 +1,5 @@
 import { useMutation, useQuery } from "react-query"
 
-interface User {
-  id: number
-  username: string
-  profile: Profile
-}
-
 interface Profile {
   id: number
   firstName: string

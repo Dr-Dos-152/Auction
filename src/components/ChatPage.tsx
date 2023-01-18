@@ -1,4 +1,4 @@
-import { Container, Grid } from "@cloudscape-design/components"
+import { Container, Grid, Spinner } from "@cloudscape-design/components"
 import { useContext, useEffect, useState } from "react";
 import Chat from "./Chat"
 import ChatUser from "./ChatUser"
@@ -6,6 +6,7 @@ import * as StompJs from '@stomp/stompjs';
 import { AuthenticatedContext } from "../App";
 import moment from "moment";
 import styles from "../styles/ChatPage.module.scss";
+import useChatUsers from "../hooks/useFetchChatUsers";
 
 
 const ChatPage = () => {
@@ -93,15 +94,7 @@ const ChatPage = () => {
             { colspan: { default: 12, s: 3 } },
             { colspan: { default: 12, s: 9 } },
           ]}>
-            <div>
-              <div className={styles.chatUserContainer} onClick={() => setSelectedUser("shubdhi")}>
-                <ChatUser name="shubdhi" userId={1} />
-              </div>
-              <div className={styles.chatUserContainer} onClick={() => setSelectedUser("test")}>
-                <ChatUser name="test" userId={28} />
-              </div>
-            </div>
-
+            <ChatUsersList setSelectedUser={setSelectedUser} />
             <div>
               <p>Chatting with: <b>{selectedUser}</b></p>
               {selectedUser && <Chat key={selectedUser} userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
@@ -112,6 +105,33 @@ const ChatPage = () => {
     </div>
   )
 
+}
+
+const ChatUsersList = (props: { setSelectedUser: React.Dispatch<React.SetStateAction<string | null>> }) => {
+  const chatUsersQuery = useChatUsers();
+
+  if (chatUsersQuery.isLoading) {
+    return (
+      <Spinner />
+    )
+  }
+
+  if (chatUsersQuery.isError) {
+    return (
+      <p>Error loading list of users</p>
+    )
+  }
+
+
+  return (
+    <div className={styles.chatUsers}>
+      {chatUsersQuery.data?.map(user => {
+        return (<div className={styles.chatUserContainer} onClick={() => props.setSelectedUser(user.username)}>
+          <ChatUser name={user.username} userId={user.id} />
+        </div>)
+      })}
+    </div>
+  )
 }
 
 

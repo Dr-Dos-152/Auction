@@ -19,3 +19,9 @@ interface ChatMessageResponse {
   message: string
   sentAt: string
 }
+
+interface User {
+  id: number
+  username: string
+  profile: Profile
+}
