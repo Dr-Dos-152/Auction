@@ -25,7 +25,7 @@ const fetchUserDetails = async (userId: number) => {
 }
 
 const useUserDetails = (userId: number) => {
-  const userDetailsQuery = useQuery<User, Error>("userDetails", () =>
+  const userDetailsQuery = useQuery<User, Error>(`userDetails-${userId}`, () =>
     fetchUserDetails(userId)
   )
   return userDetailsQuery

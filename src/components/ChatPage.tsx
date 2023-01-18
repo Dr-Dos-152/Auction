@@ -95,13 +95,10 @@ const ChatPage = () => {
           ]}>
             <div>
               <div className={styles.chatUserContainer} onClick={() => setSelectedUser("shubdhi")}>
-                <ChatUser name="shubdhi" />
-              </div>
-              <div className={styles.chatUserContainer} onClick={() => setSelectedUser("bob")}>
-                <ChatUser name="bob" />
+                <ChatUser name="shubdhi" userId={1} />
               </div>
               <div className={styles.chatUserContainer} onClick={() => setSelectedUser("test")}>
-                <ChatUser name="test" />
+                <ChatUser name="test" userId={28} />
               </div>
             </div>
 
