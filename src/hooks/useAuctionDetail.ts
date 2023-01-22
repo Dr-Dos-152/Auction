@@ -22,6 +22,7 @@ export interface AuctionDetail {
   closingTime: Date
   createdById: number
   s3ImageURL?: string
+  closed: boolean
 }
 
 export interface ItemDetail {

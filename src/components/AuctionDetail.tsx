@@ -1,4 +1,4 @@
-import { Grid, SpaceBetween } from "@cloudscape-design/components"
+import { Grid, Icon, SpaceBetween } from "@cloudscape-design/components"
 import Button from "@cloudscape-design/components/button"
 import Container from "@cloudscape-design/components/container"
 import Header from "@cloudscape-design/components/header"
@@ -73,13 +73,13 @@ const AuctionDetail = () => {
       </Container>
 
       <div style={{ marginTop: "2rem" }}>
-        <Bids auctionId={auctionId!} />
+        <Bids auctionId={auctionId!} isClosed={auctionData ? auctionData.closed : true} />
       </div>
     </div>
   )
 }
 
-const Bids = (props: { auctionId: string }) => {
+const Bids = (props: { auctionId: string, isClosed: boolean }) => {
   const {
     data: bidsData,
     isLoading,
@@ -104,7 +104,12 @@ const Bids = (props: { auctionId: string }) => {
       )}
       <SpaceBetween size={"l"}>
         <BidsTable data={bidsData!} isLoading={isLoading} />
-
+        {props.isClosed &&
+          <SpaceBetween size={"xs"} direction="horizontal">
+            <Icon name="lock-private" variant="error" />
+            <b>Auction is closed and not accepting any further bids.</b>
+          </SpaceBetween>
+        }
         <div
           style={{
             display: "flex",
@@ -112,7 +117,7 @@ const Bids = (props: { auctionId: string }) => {
             justifyContent: "center",
           }}
         >
-          <Button variant="primary" onClick={(e) => setShowPlaceBidModal(true)}>
+          <Button disabled={props.isClosed} variant="primary" onClick={() => setShowPlaceBidModal(true)}>
             Place a bid
           </Button>
         </div>

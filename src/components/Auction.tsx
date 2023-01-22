@@ -47,7 +47,9 @@ const Auction = (props: Auction) => {
             </b>
           </div>
           <div className={style.closingDateText}>
-            Closes {props.closingTime}
+            {props.closed ?
+              <b>Auction is closed</b> : `Closes ${props.closingTime}`
+            }
           </div>
         </div>
       </div>
