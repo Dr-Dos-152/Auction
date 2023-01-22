@@ -25,3 +25,14 @@ interface User {
   username: string
   profile: Profile
 }
+
+interface Auction {
+  id: string
+  name: string
+  description: string
+  item: Item
+  closingTime: string
+  s3ImageURL?: string
+  currentHighestBid?: Bid
+  closed: boolean
+}

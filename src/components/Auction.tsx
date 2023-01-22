@@ -4,29 +4,27 @@ import style from "../styles/AuctionListings.module.scss"
 import AuctionItem, { Item } from "./AuctionItem"
 import { useNavigate } from "react-router-dom"
 
-interface Auction {
-  id: string
-  name: string
-  description: string
-  item: Item
-  closingTime: string
-  s3ImageURL?: string
-  currentHighestBid?: Bid
-}
 
 const Auction = (props: Auction) => {
   const navigate = useNavigate()
-
+  console.log(props)
   const handleClickAuction = (auctionId: string) => {
     navigate(`/auction/${auctionId}`)
   }
 
   return (
     <div
-      className={style.auctionCard}
+      className={`${style.auctionCard} ${props.closed ? style.closedAuction : ""}`}
       onClick={() => handleClickAuction(props.id)}
     >
       <div style={{ padding: "1rem" }}>
+        {props.closed &&
+          <div className={style.ribbon + " " + style.ribbonTopLeft}>
+            <span>
+              {"        "}Closed
+            </span>
+          </div>
+        }
         <div className={style.auctionCardHeader}>
           <img
             className={style.auctionCardImage}

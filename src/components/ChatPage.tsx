@@ -7,8 +7,6 @@ import { AuthenticatedContext } from "../App";
 import moment from "moment";
 import styles from "../styles/ChatPage.module.scss";
 import useChatUsers from "../hooks/useFetchChatUsers";
-import { NonCancelableEventHandler } from "@cloudscape-design/components/internal/events";
-import { BaseChangeDetail, InputProps } from "@cloudscape-design/components/input/interfaces";
 
 
 const ChatPage = () => {
@@ -97,10 +95,15 @@ const ChatPage = () => {
             { colspan: { default: 12, s: 9 } },
           ]}>
             <ChatUsersList setSelectedUser={setSelectedUser} />
-            <div>
-              <p>Chatting with: <b>{selectedUser}</b></p>
-              {selectedUser && <Chat key={selectedUser} userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
-            </div>
+            {selectedUser ?
+              <div>
+                <p>Chatting with: <b>{selectedUser}</b></p>
+                {selectedUser && <Chat key={selectedUser} userName={selectedUser} messages={chatMessages[selectedUser]} publishMessage={publishMessage} />}
+              </div> :
+              <div>
+                <p>It's lonely here! Select a user to chat with.</p>
+              </div>
+            }
           </Grid>
         </Container>
       </div>
@@ -140,7 +143,6 @@ const ChatUsersList = (props: { setSelectedUser: React.Dispatch<React.SetStateAc
               })}
         </div>
         <SearchChatUserInput setChatUsersFilter={setChatUsersFilter} />
-        <NewChatModal />
       </SpaceBetween>
     </div>
   )
@@ -165,15 +167,5 @@ const SearchChatUserInput = (props: { setChatUsersFilter: React.Dispatch<React.S
     </>
   )
 }
-const NewChatModal = () => {
-  const [value, setValue] = useState("");
-
-  return (
-    <div>
-      <Icon name="add-plus" />
-    </div>
-  )
-}
-
 
 export default ChatPage
