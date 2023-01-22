@@ -11,7 +11,7 @@ import Alert from "@cloudscape-design/components/alert"
 import { noop } from "lodash"
 import Logout from "./components/Logout"
 import fetchVerifyCredentials from "./utils/authUtils"
-import { string } from "zod"
+import "./index.css"
 
 const queryClient = new QueryClient()
 
