@@ -68,7 +68,7 @@ const AuctionDetail = () => {
             <Item {...auctionData!.item} />
           </div>
 
-          <UserDetail />
+          <UserDetail createdById={auctionData!.createdById} />
         </Grid>
       </Container>
 

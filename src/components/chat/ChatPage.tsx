@@ -1,12 +1,11 @@
-import { Button, Container, Grid, Icon, Input, SpaceBetween, Spinner } from "@cloudscape-design/components"
+import { Container, Grid } from "@cloudscape-design/components"
 import { useContext, useEffect, useState } from "react";
 import Chat from "./Chat"
-import ChatUser from "./ChatUser"
 import * as StompJs from '@stomp/stompjs';
-import { AuthenticatedContext } from "../App";
+import { AuthenticatedContext } from "../../App";
 import moment from "moment";
-import styles from "../styles/ChatPage.module.scss";
-import useChatUsers from "../hooks/useFetchChatUsers";
+import ChatUsersList from "./ChatList";
+
 
 
 const ChatPage = () => {
@@ -14,6 +13,7 @@ const ChatPage = () => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [chatMessages, setChatMessages] = useState<Record<string, Array<ChatMessageResponse>>>({});
   const { userName } = useContext(AuthenticatedContext);
+
 
   useEffect(() => {
     setChatMessages({});
@@ -112,60 +112,6 @@ const ChatPage = () => {
 
 }
 
-const ChatUsersList = (props: { setSelectedUser: React.Dispatch<React.SetStateAction<string | null>> }) => {
-  const chatUsersQuery = useChatUsers();
-  const [chatUsersFilter, setChatUsersFilter] = useState("");
 
-  if (chatUsersQuery.isLoading) {
-    return (
-      <Spinner />
-    )
-  }
-
-  if (chatUsersQuery.isError) {
-    return (
-      <p>Error loading list of users</p>
-    )
-  }
-
-
-  return (
-    <div>
-      <SpaceBetween size={"s"} direction="vertical">
-        <div className={styles.chatUsers}>
-          {
-            chatUsersQuery.data?.filter(user => chatUsersFilter === ""
-              || user.username.toLocaleLowerCase().startsWith(chatUsersFilter.toLowerCase()))
-              .map(user => {
-                return (<div className={styles.chatUserContainer} onClick={() => props.setSelectedUser(user.username)}>
-                  <ChatUser name={user.username} userId={user.id} />
-                </div>)
-              })}
-        </div>
-        <SearchChatUserInput setChatUsersFilter={setChatUsersFilter} />
-      </SpaceBetween>
-    </div>
-  )
-}
-
-// TODO: Debounce if needed
-const SearchChatUserInput = (props: { setChatUsersFilter: React.Dispatch<React.SetStateAction<string>> }) => {
-  const [value, setValue] = useState("");
-
-  const handleInputChange = (value: string) => {
-    setValue(value)
-    if (value.trim().length !== 0) {
-      props.setChatUsersFilter(value)
-    } else {
-      props.setChatUsersFilter("")
-    }
-  }
-
-  return (
-    <>
-      <Input placeholder="Search a user..." value={value} onChange={(e) => handleInputChange(e.detail.value)} />
-    </>
-  )
-}
 
 export default ChatPage

@@ -8,7 +8,7 @@ interface Profile {
   profilePictureURL: string
 }
 
-const fetchUserDetails = async (userId: number) => {
+const fetchUserDetails = async (userId: number | null) => {
   const response = await fetch(`/api/v1/user/${userId}`, {
     method: "GET",
   })
@@ -18,9 +18,13 @@ const fetchUserDetails = async (userId: number) => {
   return await response.json()
 }
 
-const useUserDetails = (userId: number) => {
-  const userDetailsQuery = useQuery<User, Error>(`userDetails-${userId}`, () =>
-    fetchUserDetails(userId)
+const useUserDetails = (userId: number | null) => {
+  const userDetailsQuery = useQuery<User, Error>(
+    `userDetails-${userId}`,
+    () => fetchUserDetails(userId),
+    {
+      enabled: !!userId,
+    }
   )
   return userDetailsQuery
 }

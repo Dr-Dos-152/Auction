@@ -10,7 +10,7 @@ import AuctionDetail from "./components/AuctionDetail"
 import Profile from "./components/Profile"
 import Login from "./components/Login"
 import Register from "./components/Register"
-import ChatPage from "./components/ChatPage"
+import ChatPage from "./components/chat/ChatPage"
 
 const router = createBrowserRouter([
   {
@@ -52,9 +52,7 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
+  <RouterProvider router={router} />
 )
 
 // If you want to start measuring performance in your app, pass a function

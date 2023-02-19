@@ -4,9 +4,9 @@ import Input from '@cloudscape-design/components/input';
 import { noop } from 'lodash';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
-import { KeyCodes } from '../constants/keyCodes';
-import fetchChatHistory from '../hooks/useChatHistory';
-import styles from "../styles/Chat.module.scss";
+import { KeyCodes } from '../../constants/keyCodes';
+import fetchChatHistory from '../../hooks/useChatHistory';
+import styles from "../../styles/Chat.module.scss";
 
 const Chat = (props: {
   userName: string, messages: Array<ChatMessageResponse>, publishMessage: (message: { destinationUserName: string; body: string }) => void,
@@ -122,12 +122,18 @@ const Chat = (props: {
 
 const Message = (props: ChatMessageResponse & { highlight: boolean }) => {
 
+  const sentAt = moment(props.sentAt)
+
+
   return (
     <div className={props.highlight ? styles.messageContainer : ""}>
       <div className={props.highlight ? styles.messageHighlight : styles.message}>
         <div className={styles.messageHeader}>
           <span>
-            {moment(props.sentAt).format('HH:mm:ss')}
+            {
+              sentAt.isSame(moment(), 'day') ?
+                sentAt.format('HH:mm:ss') : sentAt.format('MMMM Do, HH:mm:ss')
+            }
           </span>
           <span className={props.highlight ? styles.messageUserNameHighlight : styles.messageUserName}>
             {props.userName}
