@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useQuery } from "react-query"
 import Spinner from "@cloudscape-design/components/spinner"
 import moment from "moment"
-import Auction from "../Auction"
+import Auction from "../auction/Auction"
 import ButtonDropdown from "@cloudscape-design/components/button-dropdown"
 import {
   Badge,

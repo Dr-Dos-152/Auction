@@ -5,12 +5,12 @@ import Header from "@cloudscape-design/components/header"
 import Spinner from "@cloudscape-design/components/spinner"
 import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { AlertContext } from "../App"
-import useAuctionDetail, { ItemDetail } from "../hooks/useAuctionDetail"
-import useBids from "../hooks/useBids"
+import { AlertContext } from "../../App"
+import useAuctionDetail, { ItemDetail } from "../../hooks/useAuctionDetail"
+import useBids from "../../hooks/useBids"
+import UserDetail from "../UserDetail"
 import BidsTable from "./BidsTable"
 import PlaceBidModal from "./PlaceBidModal"
-import UserDetail from "./UserDetail"
 
 const AuctionDetail = () => {
   const { auctionId } = useParams()

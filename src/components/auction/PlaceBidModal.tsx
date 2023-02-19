@@ -11,8 +11,8 @@ import { forOwn } from "lodash"
 import React, { useContext, useState } from "react"
 import { Form } from "react-router-dom"
 import { z } from "zod"
-import { FlashbarContext } from "../App"
-import useCreateBid from "../hooks/useCreateBid"
+import { FlashbarContext } from "../../App"
+import useCreateBid from "../../hooks/useCreateBid"
 
 interface PlaceBidModalProps {
   setShowPlaceBidModal: React.Dispatch<React.SetStateAction<boolean>>

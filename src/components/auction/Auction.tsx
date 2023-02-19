@@ -1,6 +1,6 @@
 import React from "react"
 import Header from "@cloudscape-design/components/header"
-import style from "../styles/AuctionListings.module.scss"
+import style from "../../styles/AuctionListings.module.scss"
 import AuctionItem, { Item } from "./AuctionItem"
 import { useNavigate } from "react-router-dom"
 

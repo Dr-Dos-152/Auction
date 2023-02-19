@@ -7,7 +7,7 @@ import {
 } from "@cloudscape-design/components"
 import moment from "moment"
 import { Link } from "react-router-dom";
-import { Bid } from "../hooks/useBids"
+import { Bid } from "../../hooks/useBids"
 
 const BidsTable = (props: { data: Array<Bid>; isLoading: boolean }) => {
   return (
