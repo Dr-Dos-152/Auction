@@ -83,6 +83,14 @@ function App() {
   }, [])
 
 
+  const handleItemClick = (e: any) => {
+    e.preventDefault()
+    if (e.detail.href) {
+      navigate(e.detail.href)
+    }
+  }
+
+
   const handleUserProfileClick = (
     e: CustomEvent<ButtonDropdownProps.ItemClickDetails>
   ) => {
@@ -137,7 +145,13 @@ function App() {
             text: "Explore Listings",
             href: "/",
           },
+          {
+            id: "chat",
+            text: "Send message",
+            href: "/chat",
+          },
         ],
+        onItemClick: handleItemClick
       },
       {
         type: "button",
@@ -181,13 +195,8 @@ function App() {
               href: "/register"
             },
           ],
-          onItemClick: (e) => {
-            e.preventDefault()
-            if (e.detail.href) {
-              navigate(e.detail.href)
-            }
-          }
-        },
+          onItemClick: handleItemClick,
+        }
       )
     }
     return utilities;

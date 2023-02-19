@@ -320,7 +320,7 @@ const CreateListing = () => {
             </FormField>
 
             <FormField
-              label="Certificate expiry"
+              label="Auction closing date"
               constraintText="Use YYYY/MM/DD format."
               errorText={auctionInfoErrors.closingTime}
             >
@@ -330,7 +330,7 @@ const CreateListing = () => {
                 }}
                 value={auctionInfo.closingTime}
                 openCalendarAriaLabel={(selectedDate) =>
-                  "Choose certificate expiry date" +
+                  "Choose Auction closing date" +
                   (selectedDate ? `, selected date is ${selectedDate}` : "")
                 }
                 isDateEnabled={(date) => moment(date).isAfter(moment.now())}
