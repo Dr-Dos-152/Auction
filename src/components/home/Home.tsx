@@ -25,6 +25,12 @@ const Home = () => {
             <Link to={"/create-listing"}>
               <Button variant="link">Create Listing</Button>
             </Link>
+            <Link to={"/my-listings"}>
+              <Button variant="link">My Listings</Button>
+            </Link>
+            <Link to={"/my-bids"}>
+              <Button variant="link">My Bids</Button>
+            </Link>
           </div>
         </Grid>
       </div>

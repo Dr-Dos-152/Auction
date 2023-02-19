@@ -12,6 +12,7 @@ import Login from "./components/Login"
 import Register from "./components/Register"
 import ChatPage from "./components/chat/ChatPage"
 import UserProfile from "./components/profiles/UserProfile"
+import MyListings from "./components/auction/MyListings"
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/create-listing",
         element: <CreateListing />,
+      },
+      {
+        path: "/my-listings",
+        element: <MyListings />,
       },
       {
         path: "/auction/:auctionId",
