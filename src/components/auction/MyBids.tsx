@@ -46,7 +46,9 @@ const MyBids = () => {
           {
             id: "auctionCloses",
             header: "Auction Closes in",
-            cell: (item) => moment(item.auctionClosingTime).isBefore(moment()) ? "Closed" : moment(item.auctionClosingTime).fromNow(),
+            cell: (item) => moment(item.auctionClosingTime).isBefore(moment()) ?
+              <b style={{ color: "firebrick" }}>Closed</b>
+              : moment(item.auctionClosingTime).fromNow(),
           }
         ]}
         resizableColumns
