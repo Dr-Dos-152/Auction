@@ -7,10 +7,11 @@ import ErrorPage from "./components/ErrorPage"
 import Home from "./components/home/Home"
 import CreateListing from "./components/CreateListings"
 import AuctionDetail from "./components/AuctionDetail"
-import Profile from "./components/Profile"
+import MyProfile from "./components/profiles/Profile"
 import Login from "./components/Login"
 import Register from "./components/Register"
 import ChatPage from "./components/chat/ChatPage"
+import UserProfile from "./components/profiles/UserProfile"
 
 const router = createBrowserRouter([
   {
@@ -40,7 +41,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile />,
+        element: <MyProfile />,
+      },
+      {
+        path: "/profile/:userId",
+        element: <UserProfile />,
       },
       {
         path: "/chat",

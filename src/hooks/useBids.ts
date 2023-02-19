@@ -17,6 +17,7 @@ export interface Bid {
   placedAt: Date
   amount: number
   placedByUsername: string
+  placedById: number
   comment?: string
 }
 

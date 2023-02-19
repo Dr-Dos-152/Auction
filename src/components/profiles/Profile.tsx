@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import useProfile from "../hooks/useProfile"
+import useMyProfile from "../../hooks/useProfile"
 import {
   Button,
   Container,
@@ -11,15 +11,15 @@ import {
   Spinner,
   Textarea,
 } from "@cloudscape-design/components"
-import style from "../styles/Profile.module.scss"
+import style from "../../styles/Profile.module.scss"
 import Avatar from "react-avatar-edit"
-import useUpdateProfile from "../hooks/useUpdateProfile"
-import { dataUrlToFile } from "../utils/fileUtils"
+import useUpdateProfile from "../../hooks/useUpdateProfile"
+import { dataUrlToFile } from "../../utils/fileUtils"
 
 const IMAGE_NAME = "profile-picture"
 
-const Profile = () => {
-  const { data: profile, isLoading, isError, isSuccess } = useProfile()
+const MyProfile = () => {
+  const { data: profile, isLoading, isError, isSuccess } = useMyProfile()
   const [profileInfo, setProfileInfo] = useState<Profile | null>(null)
   const [imageSource, setImageSource] = useState<null | string>(null)
   const updateProfileMutation = useUpdateProfile()
@@ -139,4 +139,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default MyProfile

@@ -6,6 +6,7 @@ import {
   Header,
 } from "@cloudscape-design/components"
 import moment from "moment"
+import { Link } from "react-router-dom";
 import { Bid } from "../hooks/useBids"
 
 const BidsTable = (props: { data: Array<Bid>; isLoading: boolean }) => {
@@ -16,7 +17,7 @@ const BidsTable = (props: { data: Array<Bid>; isLoading: boolean }) => {
         {
           id: "placedBy",
           header: "Placed By",
-          cell: (item) => item.placedByUsername,
+          cell: (item) => <Link style={{ textDecoration: 'none' }} to={`/profile/${item.placedById}`}>{item.placedByUsername}</Link>,
         },
         {
           id: "placedAt",

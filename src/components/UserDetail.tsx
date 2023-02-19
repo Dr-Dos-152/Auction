@@ -1,5 +1,5 @@
-import { Button, Container, Spinner } from "@cloudscape-design/components"
-import { useNavigate } from "react-router-dom"
+import { Button, Container, Spinner, Link as CloudscapeLink } from "@cloudscape-design/components"
+import { Link, useNavigate } from "react-router-dom"
 import useUserDetails from "../hooks/useUserProfile"
 import style from "../styles/UserDetail.module.scss"
 
@@ -33,7 +33,9 @@ const UserDetail = (props: { createdById: number }) => {
           userData?.profile.profilePictureURL ?? "/images/profile-anonymous.jpg"
         }
       ></img>
-      <b>{userData?.username}</b>
+      <CloudscapeLink>
+        <Link style={{ textDecoration: 'none' }} to={`/profile/${userData!.id}`}>{userData?.username}</Link>
+      </CloudscapeLink>
       <div className={style.fullName}>
         <p>{userData?.profile.firstName}</p>
         <p>{userData?.profile.lastName}</p>

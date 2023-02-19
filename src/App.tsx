@@ -141,9 +141,9 @@ function App() {
             href: "/create-listing",
           },
           {
-            id: "explore-listings",
-            text: "Explore Listings",
-            href: "/",
+            id: "my-listings",
+            text: "Explore My Listings",
+            href: "/my-listings",
           },
           {
             id: "chat",
@@ -160,18 +160,6 @@ function App() {
         ariaLabel: "Notifications (unread)",
         badge: true,
         disableUtilityCollapse: false,
-      },
-      {
-        type: "menu-dropdown",
-        iconName: "settings",
-        ariaLabel: "Settings",
-        title: "Settings",
-        items: [
-          {
-            id: "theme-settings",
-            text: "Change theme",
-          },
-        ],
       },
     ]
 

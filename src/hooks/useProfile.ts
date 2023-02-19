@@ -11,7 +11,7 @@ const fetchUserProfile = async () => {
   return responseData
 }
 
-const useProfile = () => {
+const useMyProfile = () => {
   const profileQueryResult = useQuery<Profile, Error>(
     "fetchProfile",
     () => fetchUserProfile(),
@@ -23,4 +23,4 @@ const useProfile = () => {
   return profileQueryResult
 }
 
-export default useProfile
+export default useMyProfile
