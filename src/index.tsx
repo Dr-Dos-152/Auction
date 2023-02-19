@@ -13,6 +13,7 @@ import Register from "./components/Register"
 import ChatPage from "./components/chat/ChatPage"
 import UserProfile from "./components/profiles/UserProfile"
 import MyListings from "./components/auction/MyListings"
+import MyBids from "./components/auction/MyBids"
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "/my-listings",
         element: <MyListings />,
+      },
+      {
+        path: "/my-bids",
+        element: <MyBids />,
       },
       {
         path: "/auction/:auctionId",

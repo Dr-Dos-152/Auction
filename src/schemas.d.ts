@@ -4,6 +4,10 @@ interface Bid {
   amount: number
   placedByUsername: string
   comment: string
+  auctionClosingTime: string
+  auctionName: string
+  auctionCurrentHighestBidAmount: number
+  auctionId: number
 }
 
 interface Profile {
