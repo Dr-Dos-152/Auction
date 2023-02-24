@@ -18,7 +18,7 @@ const ChatPage = () => {
   useEffect(() => {
     setChatMessages({});
     const client = new StompJs.Client({
-      brokerURL: 'ws://localhost:8081/websockets/stomp',
+      brokerURL: `ws://${window.location.host}/websockets/stomp`,
       connectHeaders: {
       },
       debug: function (str) {

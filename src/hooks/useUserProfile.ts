@@ -18,6 +18,13 @@ const fetchUserDetails = async (userId: number | null) => {
   return await response.json()
 }
 
+export const useUserDetailsWithUserId = (userId: number) => {
+  const userDetailsQuery = useQuery<User, Error>(`userDetails-${userId}`, () =>
+    fetchUserDetails(userId)
+  )
+  return userDetailsQuery
+}
+
 const useUserDetails = (userId: number | null) => {
   const userDetailsQuery = useQuery<User, Error>(
     `userDetails-${userId}`,
