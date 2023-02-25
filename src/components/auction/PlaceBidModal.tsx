@@ -12,6 +12,7 @@ import React, { useContext, useState } from "react"
 import { Form } from "react-router-dom"
 import { z } from "zod"
 import { FlashbarContext } from "../../App"
+import { FlashbarNotificationId } from "../../constants/notifications"
 import useCreateBid from "../../hooks/useCreateBid"
 import { FlashBarNotificationActionType } from "../../reducers/flashBarNotificationReducer"
 
@@ -46,8 +47,13 @@ const PlaceBidModal = (props: PlaceBidModalProps) => {
         type: "success",
         content:
           `You have successfully placed a bid for $${amount}!`,
-        dismissLabel: "Dismiss message",
-        id: "placeBidNotification"
+        id: FlashbarNotificationId.PLACED_BID_SUCCESS_NOTIFICATION,
+        onDismiss: () => dispatchFlashBarNotifications({
+          type: FlashBarNotificationActionType.REMOVE,
+          notification: {
+            id: FlashbarNotificationId.PLACED_BID_SUCCESS_NOTIFICATION,
+          }
+        })
       }
     })
   }

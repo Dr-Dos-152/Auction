@@ -14,12 +14,15 @@ import {
 import { AlertContext } from "../../App"
 
 const fetchAuctions = async (
-  createdAtOrder: CreatedAtOrder,
+  sortOrder: SortOrder,
   currentPageIndex: number
 ) => {
+  const sortByColumn = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.BIDS_ORDER_MOST ? "bids" : "createdAt";
+  const sortOrderString = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.CREATED_AT_LATEST ? "asc" : "desc";
+
   const result = await fetch(
     `/api/v1/auctions?pageNumber=${currentPageIndex - 1
-    }&createdAtOrder=${createdAtOrder}`,
+    }&sortBy=${sortByColumn}&sortOrder=${sortOrderString}`,
     {
       method: "GET",
     }
@@ -33,14 +36,13 @@ const fetchAuctions = async (
 }
 
 const AuctionListings = () => {
-  const [createdAtOrder, setCreatedAtOrder] = useState(CreatedAtOrder.LATEST)
-  const [bidsOrder, setBidsOrder] = useState(BidsOrder.MOST)
+  const [sortOrder, setSortOrder] = useState(SortOrder.CREATED_AT_LATEST)
   const [currentPageIndex, setCurrentPageIndex] = useState(1)
 
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery<
     { auctions: Array<Auction>; numPages: number },
     Error
-  >("queryAllAuctions", () => fetchAuctions(createdAtOrder, currentPageIndex), {
+  >("queryAllAuctions", () => fetchAuctions(sortOrder, currentPageIndex), {
     retry: false,
     refetchOnWindowFocus: false,
   })
@@ -63,7 +65,7 @@ const AuctionListings = () => {
 
   useEffect(() => {
     refetch()
-  }, [bidsOrder, createdAtOrder])
+  }, [sortOrder])
 
   if (isError) {
     return <b>Could not fetch the data</b>
@@ -77,10 +79,8 @@ const AuctionListings = () => {
     <>
       <div>
         <AuctionSelectionDropdown
-          createdAtOrder={createdAtOrder}
-          setCreatedAtOrder={setCreatedAtOrder}
-          bidsOrder={bidsOrder}
-          setBidsOrder={setBidsOrder}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
       </div>
 
@@ -121,21 +121,16 @@ const AuctionListings = () => {
   )
 }
 
-enum CreatedAtOrder {
-  LATEST = "asc",
-  OLDEST = "desc",
-}
-
-enum BidsOrder {
-  LEAST = "least",
-  MOST = "most",
+enum SortOrder {
+  CREATED_AT_LATEST = "Latest",
+  CREATED_AT_OLDEST = "Oldest",
+  BIDS_ORDER_LEAST = "Least Bids",
+  BIDS_ORDER_MOST = "Most Bids",
 }
 
 interface AuctionSelectionDropdownProps {
-  createdAtOrder: CreatedAtOrder
-  setCreatedAtOrder: React.SetStateAction<any>
-  bidsOrder: BidsOrder
-  setBidsOrder: React.SetStateAction<any>
+  sortOrder: SortOrder
+  setSortOrder: React.SetStateAction<any>
 }
 
 const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
@@ -145,41 +140,25 @@ const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
         <SpaceBetween size={"l"} direction="horizontal">
           <ButtonDropdown
             items={[
-              { text: "Latest", id: CreatedAtOrder.LATEST, disabled: false },
-              { text: "Oldest", id: CreatedAtOrder.OLDEST, disabled: false },
+              { text: "Newest", id: SortOrder.CREATED_AT_LATEST, disabled: false },
+              { text: "Oldest", id: SortOrder.CREATED_AT_OLDEST, disabled: false },
+              { text: "Most bids", id: SortOrder.BIDS_ORDER_MOST, disabled: false },
+              { text: "Least bids", id: SortOrder.BIDS_ORDER_LEAST, disabled: false },
             ]}
             onItemClick={(e) => {
               const selection = e.detail.id
-              props.setCreatedAtOrder(selection as CreatedAtOrder)
+              props.setSortOrder(selection as SortOrder)
             }}
           >
-            Sort By Created
+            Sort By
           </ButtonDropdown>
-          <Badge
-            color={
-              props.createdAtOrder === CreatedAtOrder.LATEST ? "green" : "red"
-            }
-          >
-            {props.createdAtOrder}
-          </Badge>
-        </SpaceBetween>
 
-        <SpaceBetween size={"l"} direction="horizontal">
-          <ButtonDropdown
-            items={[
-              { text: "Least", id: BidsOrder.LEAST, disabled: false },
-              { text: "Most", id: BidsOrder.MOST, disabled: false },
-            ]}
-            onItemClick={(e) => {
-              const selection = e.detail.id
-              props.setBidsOrder(selection as BidsOrder)
-            }}
+          <Badge
           >
-            Sort By Bids
-          </ButtonDropdown>
-          <Badge color={props.bidsOrder === BidsOrder.MOST ? "red" : "green"}>
-            {props.bidsOrder}
+            {props.sortOrder}
           </Badge>
+
+
         </SpaceBetween>
       </SpaceBetween>
     </>
