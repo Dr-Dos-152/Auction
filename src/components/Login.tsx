@@ -2,7 +2,7 @@ import { Button, FormField, Input, SpaceBetween } from "@cloudscape-design/compo
 import Form from "@cloudscape-design/components/form";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthenticatedContext } from "../App";
+import { AuthenticatedContext, FlashbarContext } from "../App";
 import fetchWrapper from "../utils/fetchWrapper";
 
 
@@ -28,9 +28,13 @@ const Login = () => {
   const { userIsLoggedIn, setUserIsLoggedIn } = useContext(AuthenticatedContext);
 
   const handleClickSubmit = async () => {
-    await fetchLogin(username, password);
-    navigate('/');
-    setUserIsLoggedIn(true)
+    try {
+      await fetchLogin(username, password);
+      navigate('/');
+      setUserIsLoggedIn(true)
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   if (userIsLoggedIn) {

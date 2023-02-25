@@ -2,6 +2,7 @@ import { Button, Modal, SpaceBetween } from "@cloudscape-design/components"
 import React, { useContext } from "react"
 import { FlashbarContext } from "../App"
 import useLogout from "../hooks/useLogout"
+import { FlashBarNotificationActionType } from "../reducers/flashBarNotificationReducer"
 
 const Logout = (props: {
   setShowLogOutModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -12,31 +13,28 @@ const Logout = (props: {
     props.setUserIsLoggedIn(false)
 
   })
-  const { flashBarNotification, setFlashBarNotification } = useContext(FlashbarContext);
+  const { dispatchFlashBarNotifications } = useContext(FlashbarContext);
 
   const handleLogoutClick = () => {
     logoutMutation.mutate()
     props.setShowLogOutModal(false)
-    const newFlashBarNotification = [...flashBarNotification]
-    newFlashBarNotification.push(
-      {
+    dispatchFlashBarNotifications({
+      type: FlashBarNotificationActionType.ADD,
+      notification: {
         header: "Logged out successfully",
         type: "success",
         content:
           "You have been logged out, bye!",
-        dismissible: true,
         dismissLabel: "Dismiss message",
-        onDismiss: () => {
-          setFlashBarNotification(flashBarNotifications => {
-            return flashBarNotifications.filter((flashBarNotification) => {
-              return flashBarNotification.id !== "logoutNotification"
-            })
-          })
-        },
-        id: "logoutNotification"
+        id: "logoutNotification",
+        onDismiss: () => dispatchFlashBarNotifications({
+          type: FlashBarNotificationActionType.REMOVE,
+          notification: {
+            id: "logoutNotification"
+          }
+        })
       }
-    )
-    setFlashBarNotification(newFlashBarNotification);
+    })
   }
 
   return (

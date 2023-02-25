@@ -13,6 +13,7 @@ import { Form } from "react-router-dom"
 import { z } from "zod"
 import { FlashbarContext } from "../../App"
 import useCreateBid from "../../hooks/useCreateBid"
+import { FlashBarNotificationActionType } from "../../reducers/flashBarNotificationReducer"
 
 interface PlaceBidModalProps {
   setShowPlaceBidModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -33,71 +34,55 @@ const PlaceBidModal = (props: PlaceBidModalProps) => {
     amount: "",
     comment: "",
   })
-  const { flashBarNotification, setFlashBarNotification } = useContext(FlashbarContext);
+  const { dispatchFlashBarNotifications } = useContext(FlashbarContext);
 
   const handleMutationSuccess = () => {
     props.refetchBidsData()
-    const newFlashBarNotification = [...flashBarNotification]
-    newFlashBarNotification.push({
-      header: "Placed bid",
-      type: "success",
-      content:
-        `You have successfully placed a bid for $${amount}!`,
-      dismissible: true,
-      dismissLabel: "Dismiss message",
-      onDismiss: () => {
-        setFlashBarNotification(flashBarNotifications => {
-          return flashBarNotifications.filter((flashBarNotification) => {
-            return flashBarNotification.id !== "placeBidNotification"
-          })
-        })
-      },
-      id: "placeBidNotification"
+
+    dispatchFlashBarNotifications({
+      type: FlashBarNotificationActionType.ADD,
+      notification: {
+        header: "Placed bid",
+        type: "success",
+        content:
+          `You have successfully placed a bid for $${amount}!`,
+        dismissLabel: "Dismiss message",
+        id: "placeBidNotification"
+      }
     })
-    setFlashBarNotification(newFlashBarNotification);
   }
 
   const handleMutate = () => {
-    const newFlashBarNotification = [...flashBarNotification]
-    newFlashBarNotification.push({
-      header: "Placing bid...",
-      type: "info",
-      content: <Spinner />,
-      dismissible: true,
-      dismissLabel: "Dismiss message",
-      onDismiss: () => {
-        setFlashBarNotification(flashBarNotifications => {
-          return flashBarNotifications.filter((flashBarNotification) => {
-            return flashBarNotification.id !== "placeBidNotification"
-          })
-        })
-      },
-      id: "placeBidNotification"
+    dispatchFlashBarNotifications({
+      type: FlashBarNotificationActionType.ADD,
+      notification: {
+        header: "Placing bid...",
+        type: "info",
+        content: <Spinner />,
+        dismissLabel: "Dismiss message",
+        id: "placeBidNotification"
+      }
     })
-
-    props.setShowPlaceBidModal(false)
-    setFlashBarNotification(newFlashBarNotification);
   }
 
   const handleError = () => {
-    const newFlashBarNotification = [...flashBarNotification]
-    newFlashBarNotification.push({
-      header: "Error placing the bid",
-      type: "error",
-      content: "Please try again later",
-      dismissible: true,
-      dismissLabel: "Dismiss message",
-      onDismiss: () => {
-        setFlashBarNotification(flashBarNotifications => {
-          return flashBarNotifications.filter((flashBarNotification) => {
-            return flashBarNotification.id !== "placeBidNotification"
-          })
-        })
-      },
-      id: "placeBidNotification"
-    })
 
-    setFlashBarNotification(newFlashBarNotification);
+    dispatchFlashBarNotifications({
+      type: FlashBarNotificationActionType.ADD,
+      notification: {
+        header: "Error placing the bid",
+        type: "error",
+        content: "Please try again later",
+        dismissLabel: "Dismiss message",
+        id: "placeBidNotification",
+        onDismiss: () => dispatchFlashBarNotifications({
+          type: FlashBarNotificationActionType.REMOVE,
+          notification: {
+            id: "placeBidNotification"
+          }
+        })
+      }
+    })
   }
 
   const createBidMutation = useCreateBid({

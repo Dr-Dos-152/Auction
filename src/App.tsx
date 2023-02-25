@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useEffect, useState } from "react"
+import React, { createContext, ReactNode, useEffect, useReducer, useState } from "react"
 import "./App.scss"
 import "@cloudscape-design/global-styles/index.css"
 import TopNavigation, { TopNavigationProps } from "@cloudscape-design/components/top-navigation"
@@ -12,6 +12,7 @@ import { noop } from "lodash"
 import Logout from "./components/Logout"
 import fetchVerifyCredentials from "./utils/authUtils"
 import "./index.css"
+import flashBarNotificationReducer, { FlashBarNotificationAction, FlashBarNotificationActionType } from "./reducers/flashBarNotificationReducer"
 
 const queryClient = new QueryClient()
 
@@ -47,19 +48,19 @@ export const AuthenticatedContext = createContext<AuthenticatedContextType>({
 })
 
 interface FlashbarContextType {
-  flashBarNotification: Array<FlashbarProps.MessageDefinition>,
-  setFlashBarNotification: React.Dispatch<React.SetStateAction<Array<FlashbarProps.MessageDefinition>>>
+  flashBarNotifications: FlashbarProps.MessageDefinition[],
+  dispatchFlashBarNotifications: React.Dispatch<FlashBarNotificationAction>
 }
 
 export const FlashbarContext = createContext<FlashbarContextType>({
-  flashBarNotification: [],
-  setFlashBarNotification: noop,
+  flashBarNotifications: [],
+  dispatchFlashBarNotifications: noop,
 })
 
 
 function App() {
   const [alertNotification, setAlertNotification] = useState<null | Alert>(null)
-  const [flashBarNotification, setFlashBarNotification] = useState<Array<FlashbarProps.MessageDefinition>>([]);
+  const [flashBarNotifications, dispatchFlashBarNotifications] = useReducer(flashBarNotificationReducer, []);
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false)
   const [userName, setUserName] = useState("")
@@ -69,7 +70,9 @@ function App() {
 
   // Flash bar should be reset on navigation to different page
   useEffect(() => {
-    setFlashBarNotification([]);
+    dispatchFlashBarNotifications({
+      type: FlashBarNotificationActionType.RESET,
+    })
   }, [location])
 
   useEffect(() => {
@@ -196,7 +199,7 @@ function App() {
         <AlertContext.Provider
           value={{ alertNotification, setAlertNotification }}
         >
-          <FlashbarContext.Provider value={{ flashBarNotification, setFlashBarNotification }}>
+          <FlashbarContext.Provider value={{ flashBarNotifications, dispatchFlashBarNotifications }}>
             <QueryClientProvider client={queryClient}>
               <TopNavigation
                 identity={{
@@ -235,10 +238,10 @@ function App() {
                   </Alert>
                 </div>
               )}
-              {flashBarNotification.length !== 0 && (
+              {dispatchFlashBarNotifications.length !== 0 && (
                 <div style={{ margin: "1rem 0.5rem 0 0.5rem", position: "fixed", bottom: "2.5rem", right: "1rem", zIndex: 1000 }}>
                   <Flashbar
-                    items={flashBarNotification}
+                    items={flashBarNotifications}
                   />
                 </div>
               )}
