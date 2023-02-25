@@ -18,7 +18,7 @@ const ChatPage = () => {
   useEffect(() => {
     setChatMessages({});
     const client = new StompJs.Client({
-      brokerURL: `ws://${window.location.host}/websockets/stomp`,
+      brokerURL: `ws://${window.location.host}:8080/websockets/stomp`,
       connectHeaders: {
       },
       debug: function (str) {
@@ -28,7 +28,6 @@ const ChatPage = () => {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
-
     client.onConnect = function () {
       console.log("Connected")
 
@@ -51,6 +50,7 @@ const ChatPage = () => {
       // Bad login/passcode typically will cause an error
       // Complaint brokers will set `message` header with a brief message. Body may contain details.
       // Compliant brokers will terminate the connection after any error
+
       console.log('Broker reported error: ' + frame.headers['message']);
       console.log('Additional details: ' + frame.body);
     };

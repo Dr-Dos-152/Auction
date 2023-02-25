@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom"
 
 const Auction = (props: Auction) => {
   const navigate = useNavigate()
-  console.log(props)
   const handleClickAuction = (auctionId: string) => {
     navigate(`/auction/${auctionId}`)
   }

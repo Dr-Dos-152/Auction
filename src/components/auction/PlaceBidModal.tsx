@@ -47,11 +47,11 @@ const PlaceBidModal = (props: PlaceBidModalProps) => {
         type: "success",
         content:
           `You have successfully placed a bid for $${amount}!`,
-        id: FlashbarNotificationId.PLACED_BID_SUCCESS_NOTIFICATION,
+        id: FlashbarNotificationId.PLACED_BID_NOTIFICATION,
         onDismiss: () => dispatchFlashBarNotifications({
           type: FlashBarNotificationActionType.REMOVE,
           notification: {
-            id: FlashbarNotificationId.PLACED_BID_SUCCESS_NOTIFICATION,
+            id: FlashbarNotificationId.PLACED_BID_NOTIFICATION,
           }
         })
       }
@@ -66,13 +66,18 @@ const PlaceBidModal = (props: PlaceBidModalProps) => {
         type: "info",
         content: <Spinner />,
         dismissLabel: "Dismiss message",
-        id: "placeBidNotification"
+        id: FlashbarNotificationId.PLACED_BID_NOTIFICATION,
+        onDismiss: () => dispatchFlashBarNotifications({
+          type: FlashBarNotificationActionType.REMOVE,
+          notification: {
+            id: FlashbarNotificationId.PLACED_BID_NOTIFICATION,
+          }
+        })
       }
     })
   }
 
   const handleError = () => {
-
     dispatchFlashBarNotifications({
       type: FlashBarNotificationActionType.ADD,
       notification: {
@@ -119,6 +124,7 @@ const PlaceBidModal = (props: PlaceBidModalProps) => {
         auctionId: props.auctionId,
         ...placeBidRequestValidation.data,
       })
+      props.setShowPlaceBidModal(false)
       return
     }
 

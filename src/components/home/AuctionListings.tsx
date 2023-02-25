@@ -18,7 +18,7 @@ const fetchAuctions = async (
   currentPageIndex: number
 ) => {
   const sortByColumn = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.BIDS_ORDER_MOST ? "bids" : "createdAt";
-  const sortOrderString = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.CREATED_AT_LATEST ? "asc" : "desc";
+  const sortOrderString = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.CREATED_AT_OLDEST ? "asc" : "desc";
 
   const result = await fetch(
     `/api/v1/auctions?pageNumber=${currentPageIndex - 1
@@ -76,7 +76,7 @@ const AuctionListings = () => {
   }
 
   return (
-    <>
+    <div style={{ marginBottom: "2rem" }}>
       <div>
         <AuctionSelectionDropdown
           sortOrder={sortOrder}
@@ -117,7 +117,7 @@ const AuctionListings = () => {
           )
         })}
       </Grid>
-    </>
+    </div>
   )
 }
 
@@ -152,13 +152,10 @@ const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
           >
             Sort By
           </ButtonDropdown>
-
           <Badge
           >
             {props.sortOrder}
           </Badge>
-
-
         </SpaceBetween>
       </SpaceBetween>
     </>
