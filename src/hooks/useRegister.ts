@@ -1,4 +1,8 @@
+import { useContext } from "react"
 import { useMutation } from "react-query"
+import { FlashbarContext } from "../App"
+import { FlashbarNotificationId } from "../constants/notifications"
+import { FlashBarNotificationActionType } from "../reducers/flashBarNotificationReducer"
 import fetchWrapper from "../utils/fetchWrapper"
 
 interface UserDetails {
@@ -25,10 +29,30 @@ const fetchUserRegister = async (userDetails: UserDetails) => {
 }
 
 const useRegister = (args: { handleMutationSuccess: Function }) => {
+  const { dispatchFlashBarNotifications } = useContext(FlashbarContext)
+
   const registerMutation = useMutation({
     mutationFn: (userDetails: UserDetails) => fetchUserRegister(userDetails),
     onSuccess: () => {
       args.handleMutationSuccess()
+    },
+    onError: () => {
+      dispatchFlashBarNotifications({
+        type: FlashBarNotificationActionType.ADD,
+        notification: {
+          header: "Could not register!",
+          content: "Please try again later",
+          id: FlashbarNotificationId.REGISTER_ERROR_NOTIFICATION,
+          type: "error",
+          onDismiss: () =>
+            dispatchFlashBarNotifications({
+              type: FlashBarNotificationActionType.REMOVE,
+              notification: {
+                id: FlashbarNotificationId.REGISTER_ERROR_NOTIFICATION,
+              },
+            }),
+        },
+      })
     },
   })
 

@@ -3,6 +3,8 @@ import Form from "@cloudscape-design/components/form";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthenticatedContext, FlashbarContext } from "../App";
+import { FlashbarNotificationId } from "../constants/notifications";
+import { FlashBarNotificationActionType } from "../reducers/flashBarNotificationReducer";
 import fetchWrapper from "../utils/fetchWrapper";
 
 
@@ -26,6 +28,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { userIsLoggedIn, setUserIsLoggedIn } = useContext(AuthenticatedContext);
+  const { dispatchFlashBarNotifications } = useContext(FlashbarContext);
 
   const handleClickSubmit = async () => {
     try {
@@ -34,6 +37,21 @@ const Login = () => {
       setUserIsLoggedIn(true)
     } catch (e) {
       console.error(e);
+      dispatchFlashBarNotifications({
+        type: FlashBarNotificationActionType.ADD,
+        notification: {
+          header: "Error logging in!",
+          content: "Make sure username and password is entered correctly.",
+          id: FlashbarNotificationId.LOGIN_ERROR_NOTIFICATION,
+          type: "error",
+          onDismiss: () => dispatchFlashBarNotifications({
+            type: FlashBarNotificationActionType.REMOVE,
+            notification: {
+              id: FlashbarNotificationId.LOGIN_ERROR_NOTIFICATION
+            }
+          })
+        }
+      })
     }
   }
 
