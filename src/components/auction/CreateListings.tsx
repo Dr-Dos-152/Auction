@@ -19,6 +19,7 @@ import DatePicker from "@cloudscape-design/components/date-picker"
 import moment from "moment"
 import Avatar from "react-avatar-edit"
 import { dataUrlToFile } from "../../utils/fileUtils"
+import fetchAllCategories from "../../common/fetchAllCategories"
 
 const MAX_ALLOWED_FILE_SIZE_IN_BYTES = 1000000
 const IMAGE_NAME = "auctionItem"
@@ -39,7 +40,7 @@ const CreateListing = () => {
   >([])
 
   const [category, setSelectedCategory] =
-    useState<SelectProps.Option | null | null>(null)
+    useState<SelectProps.Option | null>(null)
 
   const [showCategoryError, setShowCategoryError] = useState(false)
 
@@ -101,26 +102,11 @@ const CreateListing = () => {
     },
   })
 
-  const fetchAllCategories = async () => {
-    const result = await fetch("/api/v1/categories", {
-      method: "GET",
-    })
-    const data = await result.json()
-    if (!result.ok) {
-      throw Error(data.message)
-    }
-    const categories = map(data, (category) => {
-      return {
-        label: category.name,
-        value: category.id,
-      }
-    })
-    setCategories(categories)
-  }
 
-  const handleLoadCategoryOptions = () => {
+  const handleLoadCategoryOptions = async () => {
     try {
-      fetchAllCategories()
+      const categories = await fetchAllCategories()
+      setCategories(categories)
     } catch (e) {
       setAlertNotification({
         type: "error",
@@ -333,7 +319,7 @@ const CreateListing = () => {
                   "Choose Auction closing date" +
                   (selectedDate ? `, selected date is ${selectedDate}` : "")
                 }
-                isDateEnabled={(date) => moment(date).isAfter(moment.now())}
+                isDateEnabled={(date) => moment.utc(date).isAfter(moment.now())}
                 nextMonthAriaLabel="Next month"
                 placeholder="YYYY/MM/DD"
                 previousMonthAriaLabel="Previous month"

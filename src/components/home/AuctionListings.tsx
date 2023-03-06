@@ -8,21 +8,31 @@ import ButtonDropdown from "@cloudscape-design/components/button-dropdown"
 import {
   Badge,
   Grid,
+  Multiselect,
   Pagination,
+  Select,
   SpaceBetween,
 } from "@cloudscape-design/components"
 import { AlertContext } from "../../App"
+import fetchAllCategories from "../../common/fetchAllCategories"
+import { OptionDefinition } from "@cloudscape-design/components/internal/components/option/interfaces"
 
 const fetchAuctions = async (
   sortOrder: SortOrder,
-  currentPageIndex: number
+  currentPageIndex: number,
+  category: string | null
 ) => {
   const sortByColumn = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.BIDS_ORDER_MOST ? "bids" : "createdAt";
   const sortOrderString = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.CREATED_AT_OLDEST ? "asc" : "desc";
 
-  const result = await fetch(
-    `/api/v1/auctions?pageNumber=${currentPageIndex - 1
-    }&sortBy=${sortByColumn}&sortOrder=${sortOrderString}`,
+  let url = `/api/v1/auctions?pageNumber=${currentPageIndex - 1
+    }&sortBy=${sortByColumn}&sortOrder=${sortOrderString}`
+
+  if (category !== null) {
+    url += `&category=${category}`
+  }
+
+  const result = await fetch(url,
     {
       method: "GET",
     }
@@ -38,19 +48,18 @@ const fetchAuctions = async (
 const AuctionListings = () => {
   const [sortOrder, setSortOrder] = useState(SortOrder.CREATED_AT_LATEST)
   const [currentPageIndex, setCurrentPageIndex] = useState(1)
+  const [selectedCategory, setSelectedCategory] =
+    useState<OptionDefinition | null>(null);
 
   const { data, error, isError, isLoading, isSuccess, refetch } = useQuery<
     { auctions: Array<Auction>; numPages: number },
     Error
-  >("queryAllAuctions", () => fetchAuctions(sortOrder, currentPageIndex), {
+  >(["queryAllAuctions", currentPageIndex, selectedCategory], () => fetchAuctions(sortOrder, currentPageIndex, selectedCategory?.label || null), {
     retry: false,
     refetchOnWindowFocus: false,
   })
   const { setAlertNotification } = useContext(AlertContext)
 
-  useEffect(() => {
-    refetch()
-  }, [currentPageIndex])
 
   useEffect(() => {
     if (isError) {
@@ -81,6 +90,8 @@ const AuctionListings = () => {
         <AuctionSelectionDropdown
           sortOrder={sortOrder}
           setSortOrder={setSortOrder}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       </div>
 
@@ -112,7 +123,7 @@ const AuctionListings = () => {
             <Auction
               key={auctionItem.id}
               {...auctionItem}
-              closingTime={moment(auctionItem.closingTime).fromNow()}
+              closingTime={moment.utc(auctionItem.closingTime).fromNow()}
             />
           )
         })}
@@ -131,9 +142,31 @@ enum SortOrder {
 interface AuctionSelectionDropdownProps {
   sortOrder: SortOrder
   setSortOrder: React.SetStateAction<any>
+  selectedCategory: OptionDefinition | null // FIXME: Making optional for now
+  setSelectedCategory: React.Dispatch<React.SetStateAction<OptionDefinition | null>>
 }
 
 const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
+  const [categories, setCategories] = useState<
+    { label: string; value: string }[]
+  >([])
+
+
+
+  console.log("selectedCategory", props.selectedCategory)
+
+  const handleLoadCategoryOptions = async () => {
+    try {
+      if (categories.length !== 0) {
+        return;
+      }
+      const fetchedCategories = await fetchAllCategories()
+      setCategories(fetchedCategories)
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   return (
     <>
       <SpaceBetween size="l" direction="vertical">
@@ -157,6 +190,22 @@ const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
             {props.sortOrder}
           </Badge>
         </SpaceBetween>
+
+        <div style={{ width: "100%", display: "flex", flexDirection: "row-reverse" }}>
+          <div style={{ width: "25%", }}>
+            <Select
+              selectedOption={props.selectedCategory}
+              onChange={({ detail }) => {
+                props.setSelectedCategory(detail.selectedOption)
+              }}
+              options={categories}
+              placeholder="Filter by category"
+              selectedAriaLabel="Selected Category"
+              onLoadItems={handleLoadCategoryOptions}
+              loadingText="Loading available categories"
+            />
+          </div>
+        </div>
       </SpaceBetween>
     </>
   )
