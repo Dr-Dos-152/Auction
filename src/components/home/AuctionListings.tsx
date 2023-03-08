@@ -142,7 +142,7 @@ enum SortOrder {
 interface AuctionSelectionDropdownProps {
   sortOrder: SortOrder
   setSortOrder: React.SetStateAction<any>
-  selectedCategory: OptionDefinition | null // FIXME: Making optional for now
+  selectedCategory: OptionDefinition | null
   setSelectedCategory: React.Dispatch<React.SetStateAction<OptionDefinition | null>>
 }
 

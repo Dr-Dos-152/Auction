@@ -1,4 +1,6 @@
+import { StatusCodes } from "http-status-codes"
 import { useMutation, useQuery } from "react-query"
+import { NotFoundError } from "../common/exceptions"
 
 interface Profile {
   id: number
@@ -12,6 +14,9 @@ const fetchUserDetails = async (userId: number | null) => {
   const response = await fetch(`/api/v1/user/${userId}`, {
     method: "GET",
   })
+  if (response.status == StatusCodes.NOT_FOUND) {
+    throw new NotFoundError("User not found")
+  }
   if (!response.ok) {
     throw new Error("Could not fetch user details")
   }
@@ -19,8 +24,12 @@ const fetchUserDetails = async (userId: number | null) => {
 }
 
 export const useUserDetailsWithUserId = (userId: number) => {
-  const userDetailsQuery = useQuery<User, Error>(`userDetails-${userId}`, () =>
-    fetchUserDetails(userId)
+  const userDetailsQuery = useQuery<User, Error>(
+    `userDetails-${userId}`,
+    () => fetchUserDetails(userId),
+    {
+      retry: false,
+    }
   )
   return userDetailsQuery
 }
