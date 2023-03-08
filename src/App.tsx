@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useEffect, useReducer, useState } from
 import "./App.scss"
 import "@cloudscape-design/global-styles/index.css"
 import TopNavigation, { TopNavigationProps } from "@cloudscape-design/components/top-navigation"
-import { AppLayout, ButtonDropdownProps, Flashbar, FlashbarProps } from "@cloudscape-design/components"
+import { AppLayout, Button, ButtonDropdownProps, Flashbar, FlashbarProps, Input } from "@cloudscape-design/components"
 import Footer from "./components/Footer"
 import "@cloudscape-design/global-styles/index.css"
 import { QueryClient, QueryClientProvider } from "react-query"
@@ -13,6 +13,7 @@ import Logout from "./components/Logout"
 import fetchVerifyCredentials from "./utils/authUtils"
 import "./index.css"
 import flashBarNotificationReducer, { FlashBarNotificationAction, FlashBarNotificationActionType } from "./reducers/flashBarNotificationReducer"
+import { KeyCodes } from "./constants/keyCodes"
 
 const queryClient = new QueryClient()
 
@@ -64,8 +65,10 @@ function App() {
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [userIsLoggedIn, setUserIsLoggedIn] = useState(false)
   const [userName, setUserName] = useState("")
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const navigate = useNavigate()
   const location = useLocation();
+
 
 
   // Flash bar should be reset on navigation to different page
@@ -111,6 +114,10 @@ function App() {
 
   const handleLogoutClick = () => {
     setShowLogOutModal(true)
+  }
+
+  const handleSearchClick = () => {
+    navigate(`/auctions/search?query=${searchQuery}`)
   }
 
   const getNavigationUtilities = () => {
@@ -223,6 +230,22 @@ function App() {
                   overflowMenuDismissIconAriaLabel: "Close menu",
                 }}
                 utilities={getNavigationUtilities()}
+                search={
+                  <div style={{ display: "flex", gap: "1rem" }}>
+                    <Input
+                      type="search"
+                      placeholder="Search Auctions"
+                      ariaLabel="Search Auctions" value={searchQuery || ""}
+                      onChange={(e) => setSearchQuery(e.detail.value)}
+                      onKeyDown={(e) => {
+                        if (e.detail.keyCode === KeyCodes.ENTER_KEY) {
+                          handleSearchClick()
+                        }
+                      }}
+                    />
+                    <Button onClick={handleSearchClick}>Search</Button>
+                  </div>
+                }
               />
               {alertNotification && (
                 <div style={{ margin: "1rem 0.5rem 0 0.5rem" }}>
