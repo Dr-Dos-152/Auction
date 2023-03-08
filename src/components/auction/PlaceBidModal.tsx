@@ -77,29 +77,11 @@ const PlaceBidModal = (props: PlaceBidModalProps) => {
     })
   }
 
-  const handleError = () => {
-    dispatchFlashBarNotifications({
-      type: FlashBarNotificationActionType.ADD,
-      notification: {
-        header: "Error placing the bid",
-        type: "error",
-        content: "Please try again later",
-        dismissLabel: "Dismiss message",
-        id: "placeBidNotification",
-        onDismiss: () => dispatchFlashBarNotifications({
-          type: FlashBarNotificationActionType.REMOVE,
-          notification: {
-            id: "placeBidNotification"
-          }
-        })
-      }
-    })
-  }
+
 
   const createBidMutation = useCreateBid({
     handleSuccess: handleMutationSuccess,
     handleMutate: handleMutate,
-    handleError: handleError,
   })
 
   const clearErrorForId = (id: string) => {
