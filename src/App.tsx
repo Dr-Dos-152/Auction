@@ -231,11 +231,11 @@ function App() {
                 }}
                 utilities={getNavigationUtilities()}
                 search={
-                  <div style={{ display: "flex", gap: "1rem" }}>
+                  <div style={{ display: "flex", gap: "0.5rem", }}>
                     <Input
                       type="search"
-                      placeholder="Search Auctions"
-                      ariaLabel="Search Auctions" value={searchQuery || ""}
+                      placeholder="Search By Keyword"
+                      ariaLabel="Search By Keyword" value={searchQuery || ""}
                       onChange={(e) => setSearchQuery(e.detail.value)}
                       onKeyDown={(e) => {
                         if (e.detail.keyCode === KeyCodes.ENTER_KEY) {

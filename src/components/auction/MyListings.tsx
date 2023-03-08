@@ -1,3 +1,4 @@
+import Grid from "@cloudscape-design/components/grid";
 import Spinner from "@cloudscape-design/components/spinner";
 import useMyAuctions from "../../hooks/useMyAuctions"
 import Auction from "./Auction";
@@ -22,9 +23,19 @@ const MyListings = () => {
 
   return (
     <div>
-      <p>List of your created auctions:</p>
-      {fetchMyAuctionsQuery.data?.map(auction => <Auction {...auction} />
-      )}
+
+      <p>Displaying a list of your created auctions:</p>
+      <Grid
+        gridDefinition={[
+          { colspan: { default: 12, s: 4 } },
+          { colspan: { default: 12, s: 4 } },
+          { colspan: { default: 12, s: 4 } },
+          { colspan: { default: 12, s: 4 } },
+        ]}
+      >
+        {fetchMyAuctionsQuery.data?.map(auction => <Auction {...auction} />
+        )}
+      </Grid>
     </div>
   )
 }
