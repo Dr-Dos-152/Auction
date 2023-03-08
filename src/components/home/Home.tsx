@@ -1,14 +1,7 @@
-import Grid from "@cloudscape-design/components/grid"
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react"
-import AuctionListings from "./AuctionListings"
 import { Button } from "@cloudscape-design/components"
+import Grid from "@cloudscape-design/components/grid"
 import { Link } from "react-router-dom"
+import AuctionListings from "./AuctionListings"
 
 const Home = () => {
   return (
@@ -21,7 +14,8 @@ const Home = () => {
           ]}
         >
           <AuctionListings />
-          <div>
+          <div style={{ padding: "1rem" }}>
+            <h3>Quick Actions</h3>
             <Link to={"/create-listing"}>
               <Button variant="link">Create Listing</Button>
             </Link>

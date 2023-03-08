@@ -96,18 +96,20 @@ const AuctionListings = () => {
       </div>
 
       <div>
-        <Pagination
-          ariaLabels={{
-            nextPageLabel: "Next page",
-            previousPageLabel: "Previous page",
-            pageLabel: (pageNumber) => `Page ${pageNumber} of all pages`,
-          }}
-          pagesCount={data!.numPages}
-          currentPageIndex={currentPageIndex}
-          onChange={(e) => {
-            setCurrentPageIndex(e.detail.currentPageIndex)
-          }}
-        />
+
+        {data!.auctions.length !== 0 &&
+          <Pagination
+            ariaLabels={{
+              nextPageLabel: "Next page",
+              previousPageLabel: "Previous page",
+              pageLabel: (pageNumber) => `Page ${pageNumber} of all pages`,
+            }}
+            pagesCount={data!.numPages}
+            currentPageIndex={currentPageIndex}
+            onChange={(e) => {
+              setCurrentPageIndex(e.detail.currentPageIndex)
+            }}
+          />}
       </div>
 
       <Grid
@@ -127,6 +129,8 @@ const AuctionListings = () => {
             />
           )
         })}
+
+        {data!.auctions.length === 0 && <h2>Couldn't find any auctions with selected filters</h2>}
       </Grid>
     </div>
   )
@@ -152,16 +156,13 @@ const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
   >([])
 
 
-
-  console.log("selectedCategory", props.selectedCategory)
-
   const handleLoadCategoryOptions = async () => {
     try {
       if (categories.length !== 0) {
         return;
       }
       const fetchedCategories = await fetchAllCategories()
-      setCategories(fetchedCategories)
+      setCategories([{ label: "All", value: null }, ...fetchedCategories])
     } catch (e) {
       console.error(e);
     }
