@@ -193,7 +193,7 @@ const AuctionSelectionDropdown = (props: AuctionSelectionDropdownProps) => {
         </SpaceBetween>
 
         <div style={{ width: "100%", display: "flex", flexDirection: "row-reverse" }}>
-          <div style={{ width: "25%", }}>
+          <div>
             <Select
               selectedOption={props.selectedCategory}
               onChange={({ detail }) => {
