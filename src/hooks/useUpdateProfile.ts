@@ -29,7 +29,7 @@ const fetchUpdateProfile = async (
     })
   )
 
-  const response = await fetchWrapper("/api/v1/profile/", {
+  const response = await fetchWrapper(`${process.env.REACT_APP_API_URL}/api/v1/profile/`, {
     method: "PATCH",
     body: formData,
   })

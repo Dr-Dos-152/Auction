@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes"
 
 const fetchVerifyCredentials = async () => {
   try {
-    const response = await fetch("/auth/verifyCredentials", {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/verifyCredentials`, {
       redirect: "error",
     })
 

@@ -2,7 +2,7 @@ import React from "react"
 import { useQuery } from "react-query"
 
 const fetchAuction = async (auctionId: string) => {
-  const response = await fetch(`/api/v1/auction/${auctionId}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/auction/${auctionId}`, {
     method: "GET",
   })
   const data = await response.json()

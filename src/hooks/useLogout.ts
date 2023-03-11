@@ -2,7 +2,7 @@ import { useMutation } from "react-query"
 import fetchWrapper from "../utils/fetchWrapper"
 
 const fetchUseLogout = async () => {
-  const response = await fetchWrapper("/auth/logout", {
+  const response = await fetchWrapper(`${process.env.REACT_APP_API_URL}/auth/logout`, {
     method: "POST",
   })
   if (!response.ok) {

@@ -13,7 +13,7 @@ const fetchLogin = async (username: string, password: string) => {
   formData.set("username", username);
   formData.set("password", password);
 
-  const response = await fetchWrapper('/auth/login', {
+  const response = await fetchWrapper(`${process.env.REACT_APP_API_URL}/auth/login`, {
     method: "POST",
     body: formData,
   })

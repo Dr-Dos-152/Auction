@@ -11,7 +11,7 @@ interface Profile {
 }
 
 const fetchUserDetails = async (userId: number | null) => {
-  const response = await fetch(`/api/v1/user/${userId}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/user/${userId}`, {
     method: "GET",
   })
   if (response.status == StatusCodes.NOT_FOUND) {

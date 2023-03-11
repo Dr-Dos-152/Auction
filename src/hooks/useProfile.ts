@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 
 const fetchUserProfile = async () => {
-  const response = await fetch("/api/v1/profile", {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/profile`, {
     method: "GET",
   })
   if (!response.ok) {

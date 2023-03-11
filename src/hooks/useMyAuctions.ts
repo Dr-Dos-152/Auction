@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 
 const fetchMyAuctions = async () => {
-  const result = await fetch("/api/v1/myAuctions")
+  const result = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/myAuctions`)
 
   if (!result.ok) {
     throw Error("Failed to fetch your auctions")

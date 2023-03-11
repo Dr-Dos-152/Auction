@@ -13,7 +13,7 @@ interface BidCreateRequest {
 }
 
 const fetchCreateBid = async (request: BidCreateRequest) => {
-  const response = await fetchWrapper(`/api/v1/auction/${request.auctionId}/bid`, {
+  const response = await fetchWrapper(`${process.env.REACT_APP_API_URL}/api/v1/auction/${request.auctionId}/bid`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

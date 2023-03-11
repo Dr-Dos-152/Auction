@@ -1,7 +1,7 @@
 import { map } from "lodash"
 
 const fetchAllCategories = async () => {
-  const result = await fetch("/api/v1/categories", {
+  const result = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/categories`, {
     method: "GET",
   })
   const data = await result.json()

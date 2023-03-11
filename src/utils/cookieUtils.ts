@@ -1,5 +1,5 @@
 export const fetchCSRFCookie = async () => {
-  await fetch("/auth/csrf")
+  await fetch(`${process.env.REACT_APP_API_URL}/auth/csrf`)
 }
 
 const getCookie = (name: string) => {

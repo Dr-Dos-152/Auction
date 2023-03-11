@@ -13,7 +13,7 @@ interface UserDetails {
 }
 
 const fetchUserRegister = async (userDetails: UserDetails) => {
-  const response = await fetchWrapper("/auth/register", {
+  const response = await fetchWrapper(`${process.env.REACT_APP_API_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

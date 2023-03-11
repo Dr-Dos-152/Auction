@@ -43,7 +43,7 @@ export const createAuction = async (newAuction: {
     })
   )
 
-  const response = await fetchWrapper("/api/v1/auctions", {
+  const response = await fetchWrapper(`${process.env.REACT_APP_API_URL}/api/v1/auctions`, {
     method: "POST",
     body: formData,
   })

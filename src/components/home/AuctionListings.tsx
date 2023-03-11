@@ -25,7 +25,7 @@ const fetchAuctions = async (
   const sortByColumn = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.BIDS_ORDER_MOST ? "bids" : "createdAt";
   const sortOrderString = sortOrder === SortOrder.BIDS_ORDER_LEAST || sortOrder === SortOrder.CREATED_AT_OLDEST ? "asc" : "desc";
 
-  let url = `/api/v1/auctions?pageNumber=${currentPageIndex - 1
+  let url = `${process.env.REACT_APP_API_URL}/api/v1/auctions?pageNumber=${currentPageIndex - 1
     }&sortBy=${sortByColumn}&sortOrder=${sortOrderString}`
 
   if (category !== null) {
