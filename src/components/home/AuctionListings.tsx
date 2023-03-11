@@ -35,6 +35,7 @@ const fetchAuctions = async (
   const result = await fetch(url,
     {
       method: "GET",
+      credentials: 'include'
     }
   )
   const data = await result.json()

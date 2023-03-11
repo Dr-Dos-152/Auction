@@ -1,5 +1,7 @@
 export const fetchCSRFCookie = async () => {
-  await fetch(`${process.env.REACT_APP_API_URL}/auth/csrf`)
+  await fetch(`${process.env.REACT_APP_API_URL}/auth/csrf`, {
+    credentials: 'include'
+  })
 }
 
 const getCookie = (name: string) => {

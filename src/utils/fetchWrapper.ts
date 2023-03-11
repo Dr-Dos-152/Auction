@@ -24,7 +24,7 @@ async function fetchWrapper(
   }
 
   if (init === undefined) {
-    return fetch(input, { headers: customHeaders })
+    return fetch(input, { headers: customHeaders, credentials: 'include' })
   }
 
   if (init.headers) {
@@ -35,12 +35,14 @@ async function fetchWrapper(
     return fetch(input, {
       ...init,
       headers: headers,
+      credentials: 'include'
     })
   }
 
   return fetch(input, {
     ...init,
     headers: customHeaders,
+    credentials: 'include'
   })
 }
 

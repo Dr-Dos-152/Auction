@@ -5,7 +5,10 @@ const fetchChatHistory = async (
   pageNumber?: number
 ): Promise<Array<ChatMessageResponse>> => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/v1/chatHistory/${withUser}?pageNumber=${pageNumber ?? 0}`
+    `${process.env.REACT_APP_API_URL}/api/v1/chatHistory/${withUser}?pageNumber=${pageNumber ?? 0}`,
+      {
+        credentials: 'include'
+      }
   )
   if (!response.ok) {
     throw Error("Could not fetch chat history")

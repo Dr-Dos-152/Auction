@@ -1,7 +1,9 @@
 import { useQuery } from "react-query"
 
 const fetchSearchAuctions = async (text: string) => {
-  const result = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/auctions/search?query=${text}`)
+  const result = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/auctions/search?query=${text}`, {
+    credentials: 'include'
+  })
 
   if (!result.ok) {
     throw Error("Failed to search auctions")
