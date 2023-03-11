@@ -120,63 +120,52 @@ function App() {
     navigate(`/auctions/search?query=${searchQuery}`)
   }
 
-  const getNavigationUtilities = () => {
-    const menuUtility: TopNavigationProps.Utility = {
-      type: "menu-dropdown",
-      iconName: "user-profile",
-      ariaLabel: "Account",
-      title: "Account",
-      items: [
-        {
-          id: "logout",
-          text: "Logout",
-        },
-        {
-          id: "profile",
-          text: "View/Edit Profile",
-        },
-      ],
-      onItemClick: (e) => handleUserProfileClick(e),
-    }
-
-    const utilities: TopNavigationProps.Utility[] = [
-      {
-        type: "menu-dropdown",
-        iconName: "menu",
-        title: "Services",
-        items: [
-          {
-            id: "create-listing",
-            text: "Create Listing",
-            href: "/create-listing",
-          },
-          {
-            id: "my-listings",
-            text: "Explore My Listings",
-            href: "/my-listings",
-          },
-          {
-            id: "chat",
-            text: "Send message",
-            href: "/chat",
-          },
-        ],
-        onItemClick: handleItemClick
-      },
-      {
-        type: "button",
-        iconName: "notification",
-        title: "Notifications",
-        ariaLabel: "Notifications (unread)",
-        badge: true,
-        disableUtilityCollapse: false,
-      },
-    ]
-
+  const getNavigationUtilities = (): Array<TopNavigationProps.Utility> => {
     if (userIsLoggedIn) {
-      utilities.push(menuUtility)
+      return [
+        {
+          type: "menu-dropdown",
+          iconName: "menu",
+          title: "Services",
+          items: [
+            {
+              id: "create-listing",
+              text: "Create Listing",
+              href: "/create-listing",
+            },
+            {
+              id: "my-listings",
+              text: "Explore My Listings",
+              href: "/my-listings",
+            },
+            {
+              id: "chat",
+              text: "Send message",
+              href: "/chat",
+            },
+          ],
+          onItemClick: handleItemClick
+        },
+        {
+          type: "menu-dropdown",
+          iconName: "user-profile",
+          ariaLabel: "Account",
+          title: "Account",
+          items: [
+            {
+              id: "logout",
+              text: "Logout",
+            },
+            {
+              id: "profile",
+              text: "View/Edit Profile",
+            },
+          ],
+          onItemClick: (e: CustomEvent<ButtonDropdownProps.ItemClickDetails>) => handleUserProfileClick(e),
+        }
+      ]
     } else {
-      utilities.push(
+      return [
         {
           type: "menu-dropdown",
           iconName: "user-profile",
@@ -195,9 +184,8 @@ function App() {
           ],
           onItemClick: handleItemClick,
         }
-      )
+      ]
     }
-    return utilities;
   }
 
   return (
@@ -231,6 +219,7 @@ function App() {
                 }}
                 utilities={getNavigationUtilities()}
                 search={
+                  userIsLoggedIn &&
                   <div style={{ display: "flex", gap: "0.5rem", }}>
                     <Input
                       type="search"
