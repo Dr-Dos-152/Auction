@@ -5,6 +5,7 @@ import useSearchAuctions from "../../hooks/useSearchAuctions";
 import Auction from "./Auction";
 
 
+
 const AuctionSearch = () => {
   const [searchParams, _] = useSearchParams();
   const searchAuctionsQuery = useSearchAuctions(searchParams.get("query") || "");

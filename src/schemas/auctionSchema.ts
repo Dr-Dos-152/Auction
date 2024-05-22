@@ -11,4 +11,5 @@ export const auctionSchema = z.object({
   }, z.date().min(new Date())) 
 })
 
+
 export type Auction = z.infer<typeof auctionSchema>

@@ -12,6 +12,7 @@ const UserDetail = (props: { createdById: number }) => {
   } = useUserDetails(props.createdById)
   const navigate = useNavigate();
 
+
   const handleClickChatWithUser = () => {
     navigate(`/chat?userId=${props.createdById}`)
   }

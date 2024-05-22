@@ -8,6 +8,7 @@ const ChatUser = (props: { userId: number }) => {
     return <p>Error loading user</p>;
   }
 
+
   const profilePicture = isSuccess ? <img height={"70px"} style={{ borderRadius: "50%" }} src={userData.profile.profilePictureURL ?? "/images/profile-anonymous.jpg"}></img> : ""
   return (
     <div>

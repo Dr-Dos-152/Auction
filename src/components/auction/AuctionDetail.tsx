@@ -12,6 +12,7 @@ import UserDetail from "../UserDetail"
 import BidsTable from "./BidsTable"
 import PlaceBidModal from "./PlaceBidModal"
 
+
 const AuctionDetail = () => {
   const { auctionId } = useParams()
   const { setAlertNotification } = useContext(AlertContext)

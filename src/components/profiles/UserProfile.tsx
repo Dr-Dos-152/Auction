@@ -6,6 +6,7 @@ import { useUserDetailsWithUserId } from "../../hooks/useUserProfile"
 import styles from "../../styles/UserProfile.module.scss";
 import NotFoundErrorComponent from "../404";
 
+
 const UserProfile = () => {
   const { userId } = useParams()
   const navigate = useNavigate();

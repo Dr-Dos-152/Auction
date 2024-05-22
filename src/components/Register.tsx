@@ -13,6 +13,7 @@ const registerRequestSchema = z.object({
   lastName: z.string().min(2).max(15),
 })
 
+
 const Register = () => {
   const [userInfo, setUserInfo] = useState({
     userName: "",

@@ -17,6 +17,7 @@ import { AlertContext } from "../../App"
 import fetchAllCategories from "../../common/fetchAllCategories"
 import { OptionDefinition } from "@cloudscape-design/components/internal/components/option/interfaces"
 
+
 const fetchAuctions = async (
   sortOrder: SortOrder,
   currentPageIndex: number,

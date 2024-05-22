@@ -4,6 +4,7 @@ import { FlashbarContext } from "../App"
 import useLogout from "../hooks/useLogout"
 import { FlashBarNotificationActionType } from "../reducers/flashBarNotificationReducer"
 
+
 const Logout = (props: {
   setShowLogOutModal: React.Dispatch<React.SetStateAction<boolean>>
   showLogOutModal: boolean

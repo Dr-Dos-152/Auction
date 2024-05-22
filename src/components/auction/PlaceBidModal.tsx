@@ -16,6 +16,7 @@ import { FlashbarNotificationId } from "../../constants/notifications"
 import useCreateBid from "../../hooks/useCreateBid"
 import { FlashBarNotificationActionType } from "../../reducers/flashBarNotificationReducer"
 
+
 interface PlaceBidModalProps {
   setShowPlaceBidModal: React.Dispatch<React.SetStateAction<boolean>>
   showPlaceBidModal: boolean

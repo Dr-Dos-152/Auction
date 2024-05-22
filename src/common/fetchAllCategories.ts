@@ -5,6 +5,7 @@ const fetchAllCategories = async () => {
     method: "GET",
     credentials: 'include'
   })
+
   const data = await result.json()
   if (!result.ok) {
     throw Error(data.message)

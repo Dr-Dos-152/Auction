@@ -4,3 +4,4 @@ export enum FlashbarNotificationId {
   REGISTER_ERROR_NOTIFICATION = "registerErrorNotification",
   PLACED_BID_NOTIFICATION = "placeBidNotification",
 }
+

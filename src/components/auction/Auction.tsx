@@ -11,6 +11,7 @@ const Auction = (props: Auction) => {
     navigate(`/auction/${auctionId}`)
   }
 
+
   return (
     <div
       className={`${style.auctionCard} ${props.closed ? style.closedAuction : ""}`}

@@ -15,6 +15,7 @@ const fetchAuction = async (auctionId: string) => {
   return data
 }
 
+
 export interface AuctionDetail {
   id: number
   name: string

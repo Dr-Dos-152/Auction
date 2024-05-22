@@ -16,6 +16,7 @@ import MyListings from "./components/auction/MyListings"
 import MyBids from "./components/auction/MyBids"
 import AuctionSearch from "./components/auction/AuctionSearch"
 
+
 const router = createBrowserRouter([
   {
     path: "/",

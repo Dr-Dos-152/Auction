@@ -3,6 +3,7 @@ import Grid from "@cloudscape-design/components/grid"
 import { Link } from "react-router-dom"
 import AuctionListings from "./AuctionListings"
 
+
 const Home = () => {
   return (
     <>

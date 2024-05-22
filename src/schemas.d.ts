@@ -10,6 +10,7 @@ interface Bid {
   auctionId: number
 }
 
+
 interface Profile {
   id: string
   firstName: string

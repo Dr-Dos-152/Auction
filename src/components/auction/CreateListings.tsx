@@ -21,6 +21,7 @@ import Avatar from "react-avatar-edit"
 import { dataUrlToFile } from "../../utils/fileUtils"
 import fetchAllCategories from "../../common/fetchAllCategories"
 
+
 const MAX_ALLOWED_FILE_SIZE_IN_BYTES = 1000000
 const IMAGE_NAME = "auctionItem"
 

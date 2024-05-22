@@ -14,6 +14,7 @@ const fetchVerifyCredentials = async () => {
         userName: data.userName,
       }
     }
+
   } catch (e) {
     console.warn(e)
   }

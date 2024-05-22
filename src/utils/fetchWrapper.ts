@@ -18,6 +18,7 @@ async function fetchWrapper(
     await fetchCSRFCookie()
   }
 
+
   const csrfToken = getCookie(CSRF_COOKIE_NAME) as string
   const customHeaders = {
     "X-XSRF-TOKEN": csrfToken,

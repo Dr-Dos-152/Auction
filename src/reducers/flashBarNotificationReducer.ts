@@ -7,6 +7,7 @@ export enum FlashBarNotificationActionType {
   RESET = "reset",
 }
 
+
 interface FlashBarNotification {
   header?: string
   content?: React.ReactNode

@@ -9,6 +9,7 @@ import Input from "@cloudscape-design/components/input";
 import useUserDetails from "../../hooks/useUserProfile";
 
 
+
 // TODO: Refactor, lots of useEffects which might not be needed
 const ChatUsersList = (props: { setSelectedUser: React.Dispatch<React.SetStateAction<string | null>> }) => {
   const chatUsersQuery = useChatUsers();

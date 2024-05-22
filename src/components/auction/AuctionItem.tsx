@@ -6,6 +6,7 @@ export interface Item {
   category: { id: string; name: string }
 }
 
+
 const AuctionItem = (props: Item) => {
   return (
     <>

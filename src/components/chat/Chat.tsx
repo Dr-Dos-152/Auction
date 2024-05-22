@@ -8,6 +8,7 @@ import { KeyCodes } from '../../constants/keyCodes';
 import fetchChatHistory from '../../hooks/useChatHistory';
 import styles from "../../styles/Chat.module.scss";
 
+
 const Chat = (props: {
   userName: string, messages: Array<ChatMessageResponse>, publishMessage: (message: { destinationUserName: string; body: string }) => void,
 }) => {
