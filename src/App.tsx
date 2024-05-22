@@ -203,7 +203,7 @@ function App() {
                     navigate("/");
                   },
                   href: "/",
-                  title: "YetAnotherAuctionApp",
+                  title: "Geeky Bids",
                   logo: {
                     src: "/images/logo.png",
                     alt: "Auction App",
